@@ -3,7 +3,7 @@ using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
-
+//TODO:不用每一帧都更新，设置一个可以指定更新频率的参数
 public class YFI_AnimatorController : UdonSharpBehaviour
 {
     [Tooltip("Flight Data Interface")]
@@ -23,12 +23,15 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     public int MAXVS = 16000;
     //暂时不考虑航向表有量程
 
+    //侧滑这个数值先固定着
+    public int MAXHORIG = 2;
     //一些需要提前算好的参数
     private float pitchFixValue = 3.5f;
     private float bankFixValue = 0.5f;
     private float MAXPITCH_double = 40f;
     private float MAXVS_double = 32000f;
     private float MAXBANK_double = 90f;
+    private float MAXHORIG_double = 4f;
     //animator strings that are sent every frame are converted to int for optimization
     private int AIRSPEED_HASH = Animator.StringToHash("AirSpeedNormalize");
     private int PITCH_HASH = Animator.StringToHash("PitchAngelNormalize");
@@ -36,6 +39,7 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     private int ALT_HASH = Animator.StringToHash("AltitudeNormalize");
     private int ROC_HASH = Animator.StringToHash("VerticalSpeedNormalize");
     private int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
+    private int HORIG_HASH = Animator.StringToHash("HoriGNormalize");
     /*
     private int YAWINPUT_STRING = Animator.StringToHash("yawinput");
     private int ROLLINPUT_STRING = Animator.StringToHash("rollinput");
@@ -56,6 +60,8 @@ public class YFI_AnimatorController : UdonSharpBehaviour
 
         pitchFixValue = (90f - MAXPITCH)/ MAXPITCH_double;
         bankFixValue = (90f - MAXBANK) / MAXBANK_double;
+
+        MAXHORIG_double = 2f * MAXHORIG;
     }
     private void LateUpdate()
     {
@@ -95,6 +101,14 @@ public class YFI_AnimatorController : UdonSharpBehaviour
         if (0.0f < BankNormal && BankNormal < 1.0f)
         {    
             IndicatorAnimator.SetFloat(BANK_HASH, BankNormal); 
+        }
+
+        //Slip
+        float HoriG = (float)YFI_FlightDataInterface.GetProgramVariable("HoriG");
+        float HoriGNormal = HoriG / MAXHORIG_double + 0.5f;
+        if (0.0f < HoriGNormal && HoriGNormal < 1.0f)
+        {
+            IndicatorAnimator.SetFloat(HORIG_HASH, HoriGNormal);
         }
 
     }

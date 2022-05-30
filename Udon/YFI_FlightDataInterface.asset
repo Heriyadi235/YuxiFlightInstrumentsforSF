@@ -44,7 +44,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 25
+      Data: 24
     - Name: 
       Entry: 7
       Data: 
@@ -680,7 +680,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Mach
+      Data: HoriG
     - Name: $v
       Entry: 7
       Data: 41|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -701,10 +701,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: Mach
+      Data: HoriG
     - Name: symbolUniqueName
       Entry: 1
-      Data: Mach
+      Data: HoriG
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -737,7 +737,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: TAS
+      Data: Mach
     - Name: $v
       Entry: 7
       Data: 44|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -758,10 +758,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: TAS
+      Data: Mach
     - Name: symbolUniqueName
       Entry: 1
-      Data: TAS
+      Data: Mach
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -794,7 +794,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IAS
+      Data: TAS
     - Name: $v
       Entry: 7
       Data: 47|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -815,10 +815,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: IAS
+      Data: TAS
     - Name: symbolUniqueName
       Entry: 1
-      Data: IAS
+      Data: TAS
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -851,7 +851,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: RateOfClimb
+      Data: IAS
     - Name: $v
       Entry: 7
       Data: 50|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -872,10 +872,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: RateOfClimb
+      Data: IAS
     - Name: symbolUniqueName
       Entry: 1
-      Data: RateOfClimb
+      Data: IAS
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -908,7 +908,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Altitude
+      Data: RateOfClimb
     - Name: $v
       Entry: 7
       Data: 53|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -929,10 +929,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: Altitude
+      Data: RateOfClimb
     - Name: symbolUniqueName
       Entry: 1
-      Data: Altitude
+      Data: RateOfClimb
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -965,7 +965,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Heading
+      Data: Altitude
     - Name: $v
       Entry: 7
       Data: 56|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -986,10 +986,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: Heading
+      Data: Altitude
     - Name: symbolUniqueName
       Entry: 1
-      Data: Heading
+      Data: Altitude
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1022,7 +1022,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Pitch
+      Data: Heading
     - Name: $v
       Entry: 7
       Data: 59|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -1043,10 +1043,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: Pitch
+      Data: Heading
     - Name: symbolUniqueName
       Entry: 1
-      Data: Pitch
+      Data: Heading
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1079,7 +1079,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Bank
+      Data: Pitch
     - Name: $v
       Entry: 7
       Data: 62|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -1100,10 +1100,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: Bank
+      Data: Pitch
     - Name: symbolUniqueName
       Entry: 1
-      Data: Bank
+      Data: Pitch
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1136,7 +1136,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: SeaLevel
+      Data: Bank
     - Name: $v
       Entry: 7
       Data: 65|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -1157,10 +1157,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: SeaLevel
+      Data: Bank
     - Name: symbolUniqueName
       Entry: 1
-      Data: SeaLevel
+      Data: Bank
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1193,7 +1193,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: DeltaTime
+      Data: SeaLevel
     - Name: $v
       Entry: 7
       Data: 68|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -1214,10 +1214,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: DeltaTime
+      Data: SeaLevel
     - Name: symbolUniqueName
       Entry: 1
-      Data: DeltaTime
+      Data: SeaLevel
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1455,63 +1455,6 @@ MonoBehaviour:
     - Name: fieldAttributes
       Entry: 7
       Data: 82|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: userBehaviourSource
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: TimeBefore
-    - Name: $v
-      Entry: 7
-      Data: 83|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
-    - Name: fieldSymbol
-      Entry: 7
-      Data: 84|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
-    - Name: internalType
-      Entry: 9
-      Data: 33
-    - Name: declarationType
-      Entry: 3
-      Data: 2
-    - Name: syncMode
-      Entry: 3
-      Data: 0
-    - Name: symbolResolvedTypeName
-      Entry: 1
-      Data: SystemSingle
-    - Name: symbolOriginalName
-      Entry: 1
-      Data: TimeBefore
-    - Name: symbolUniqueName
-      Entry: 1
-      Data: TimeBefore
-    - Name: symbolDefaultValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: fieldAttributes
-      Entry: 7
-      Data: 85|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0

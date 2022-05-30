@@ -28,6 +28,7 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
     private float GValue;
     private float AngleOfAttack;
     private float GS;
+    private float HoriG;
     private float Mach;
     private float TAS;
     private float IAS;
@@ -39,12 +40,16 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
     private float SeaLevel; 
 
 
-    private float DeltaTime;
     private Vector3 DeltaVelocityVector;
     private Vector3 VelocityVectorBefore;
     private Vector3 PerdCurrentVelocityVector;
     private Vector3 LerpCurrentVelocityVector;
-    private float TimeBefore;
+
+    //private float DeltaHoriG = 0f;
+    //private float HoriGBefore = 0f;
+    //private float PerdHoriG = 0f;
+    //private float LerpHoriG = 0f;
+
 
     //方法
     private void Start()
@@ -54,16 +59,19 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
         SeaLevel = (float)SAVControl.GetProgramVariable("SeaLevel");
         localPlayer = Networking.LocalPlayer;
         CenterOfMass = EntityControl.CenterOfMass;
+
+        VehicleTransform = (Transform)SAVControl.GetProgramVariable("VehicleTransform");
     }
 
     private void OnEnable()
     {
         return;
     }
-    private void Update()
+    private void FixedUpdate()
     {
+        //0530 因为需要在外面计算侧向G力，不得已使用了fixUpdate
         //TODO:如果性能出现问题，限制此处的更新频率
-        //我觉得时间平滑不用在这里实现，但是肯定要考虑不是每一个tick都调用以减少开销
+        //我觉得时间平滑不用在这里实现，但是肯定要考虑不是每一个frame都调用以减少开销
         //float SmoothDeltaTime = Time.smoothDeltaTime;
 
         //获取速度向量
@@ -72,7 +80,7 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
 
         //(在绘制AHI时再做投影)
         //低速时，让箭头垂直向下
-        if (CurrentVelocityVector.magnitude < 2)
+        if (CurrentVelocityVector.magnitude < 2)//差不多是4节以下
         {
             CurrentVelocityVector = Vector3.down * 2;//straight down instead of spazzing out when moving very slow
         }
@@ -81,28 +89,30 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
             //插值操作，做平滑
             if (CurrentVelocityVector != VelocityVectorBefore)
             {
-                float CurrentTime = Time.time;
-                DeltaTime = CurrentTime - TimeBefore;
-                DeltaVelocityVector = (CurrentVelocityVector - VelocityVectorBefore) / DeltaTime;
-
-                VelocityVectorBefore = CurrentVelocityVector;
-                TimeBefore = CurrentTime;
-            }
-            //VelocityVector = CurrentVelocityVector + DeltaVelocityVector * (Time.time- TimeBefore);
-            PerdCurrentVelocityVector = CurrentVelocityVector + DeltaVelocityVector * (DeltaTime);
+                DeltaVelocityVector = (CurrentVelocityVector - VelocityVectorBefore) / Time.deltaTime;
+            };
+            PerdCurrentVelocityVector = CurrentVelocityVector + DeltaVelocityVector * Time.deltaTime; 
         }
 
-        //TODO:这玩意是否应该在仪表脚本里(如果有)完成
+        //算一下侧向G力(不一定对)
+        float gravity = 9.81f * Time.deltaTime;
+        Vector3 Gs3 = VehicleTransform.InverseTransformDirection(CurrentVelocityVector - VelocityVectorBefore);
+        HoriG = Gs3.x / gravity; 
+
+        VelocityVectorBefore = CurrentVelocityVector;
+        //TODO:下面这玩意是否应该在仪表脚本里(如果有)完成
         //TODO:是否需要正则化？
-        //可能需要(如果要投影在一个机械的陀螺仪（球)上)
         if ((bool)SAVControl.GetProgramVariable("IsOwner"))
         {
             VelocityVector = PerdCurrentVelocityVector;
+            
         }
         else
         {
             LerpCurrentVelocityVector = Vector3.Lerp(LerpCurrentVelocityVector, PerdCurrentVelocityVector, 9f * Time.smoothDeltaTime);
             VelocityVector = LerpCurrentVelocityVector;
+            //LerpHoriG = Mathf.Lerp(LerpHoriG, PerdHoriG, 9f * Time.smoothDeltaTime);
+            //HoriG = LerpHoriG;
         }
 
         //////////
@@ -138,7 +148,6 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
 
         if (DebugOut)
         {
-            //HUDText_G.text = string.Concat(((float)SAVControl.GetProgramVariable("VertGs")).ToString("F1"), "\n", maxGs.ToString("F1"));
             DebugOut.text = string.Concat("Headin: ", Heading.ToString(), 
             "\nPitch: ", Pitch.ToString(),
             "\nBank: ", Bank.ToString(),
@@ -148,7 +157,8 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
             "\nROC: ", RateOfClimb.ToString(),
             "\nAltitude: ", Altitude.ToString(),
             "\nGS: ", GS.ToString(),
-            "\nTAS: ", TAS.ToString());
+            "\nTAS: ", TAS.ToString(),
+            "\nHoriG:",HoriG.ToString());
         }
     }
 }

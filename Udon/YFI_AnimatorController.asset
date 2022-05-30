@@ -43,7 +43,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 18
+      Data: 21
     - Name: 
       Entry: 7
       Data: 
@@ -529,7 +529,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: pitchFixValue
+      Data: MAXHORIG
     - Name: $v
       Entry: 7
       Data: 33|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -537,29 +537,23 @@ MonoBehaviour:
       Entry: 7
       Data: 34|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
-      Entry: 7
-      Data: 35|System.RuntimeType, mscorlib
-    - Name: 
-      Entry: 1
-      Data: System.Single, mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
+      Entry: 9
+      Data: 14
     - Name: declarationType
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: syncMode
       Entry: 3
       Data: 0
     - Name: symbolResolvedTypeName
       Entry: 1
-      Data: SystemSingle
+      Data: SystemInt32
     - Name: symbolOriginalName
       Entry: 1
-      Data: pitchFixValue
+      Data: MAXHORIG
     - Name: symbolUniqueName
       Entry: 1
-      Data: pitchFixValue
+      Data: MAXHORIG
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -568,7 +562,7 @@ MonoBehaviour:
       Data: 
     - Name: fieldAttributes
       Entry: 7
-      Data: 36|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+      Data: 35|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
@@ -592,16 +586,22 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: bankFixValue
+      Data: pitchFixValue
     - Name: $v
       Entry: 7
-      Data: 37|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+      Data: 36|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: fieldSymbol
       Entry: 7
-      Data: 38|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
+      Data: 37|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
-      Entry: 9
-      Data: 35
+      Entry: 7
+      Data: 38|System.RuntimeType, mscorlib
+    - Name: 
+      Entry: 1
+      Data: System.Single, mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: declarationType
       Entry: 3
       Data: 2
@@ -613,10 +613,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: bankFixValue
+      Data: pitchFixValue
     - Name: symbolUniqueName
       Entry: 1
-      Data: bankFixValue
+      Data: pitchFixValue
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -649,7 +649,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: MAXPITCH_double
+      Data: bankFixValue
     - Name: $v
       Entry: 7
       Data: 40|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -658,7 +658,7 @@ MonoBehaviour:
       Data: 41|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
       Entry: 9
-      Data: 35
+      Data: 38
     - Name: declarationType
       Entry: 3
       Data: 2
@@ -670,10 +670,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: MAXPITCH_double
+      Data: bankFixValue
     - Name: symbolUniqueName
       Entry: 1
-      Data: MAXPITCH_double
+      Data: bankFixValue
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -706,7 +706,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: MAXVS_double
+      Data: MAXPITCH_double
     - Name: $v
       Entry: 7
       Data: 43|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -715,7 +715,7 @@ MonoBehaviour:
       Data: 44|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
       Entry: 9
-      Data: 35
+      Data: 38
     - Name: declarationType
       Entry: 3
       Data: 2
@@ -727,10 +727,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: MAXVS_double
+      Data: MAXPITCH_double
     - Name: symbolUniqueName
       Entry: 1
-      Data: MAXVS_double
+      Data: MAXPITCH_double
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -763,7 +763,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: MAXBANK_double
+      Data: MAXVS_double
     - Name: $v
       Entry: 7
       Data: 46|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -772,7 +772,7 @@ MonoBehaviour:
       Data: 47|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
       Entry: 9
-      Data: 35
+      Data: 38
     - Name: declarationType
       Entry: 3
       Data: 2
@@ -784,10 +784,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: MAXBANK_double
+      Data: MAXVS_double
     - Name: symbolUniqueName
       Entry: 1
-      Data: MAXBANK_double
+      Data: MAXVS_double
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -820,7 +820,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: AIRSPEED_HASH
+      Data: MAXBANK_double
     - Name: $v
       Entry: 7
       Data: 49|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -829,7 +829,7 @@ MonoBehaviour:
       Data: 50|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
       Entry: 9
-      Data: 14
+      Data: 38
     - Name: declarationType
       Entry: 3
       Data: 2
@@ -838,13 +838,13 @@ MonoBehaviour:
       Data: 0
     - Name: symbolResolvedTypeName
       Entry: 1
-      Data: SystemInt32
+      Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: AIRSPEED_HASH
+      Data: MAXBANK_double
     - Name: symbolUniqueName
       Entry: 1
-      Data: AIRSPEED_HASH
+      Data: MAXBANK_double
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -877,7 +877,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: PITCH_HASH
+      Data: MAXHORIG_double
     - Name: $v
       Entry: 7
       Data: 52|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -886,7 +886,7 @@ MonoBehaviour:
       Data: 53|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
       Entry: 9
-      Data: 14
+      Data: 38
     - Name: declarationType
       Entry: 3
       Data: 2
@@ -895,13 +895,13 @@ MonoBehaviour:
       Data: 0
     - Name: symbolResolvedTypeName
       Entry: 1
-      Data: SystemInt32
+      Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: PITCH_HASH
+      Data: MAXHORIG_double
     - Name: symbolUniqueName
       Entry: 1
-      Data: PITCH_HASH
+      Data: MAXHORIG_double
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -934,7 +934,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: BANK_HASH
+      Data: AIRSPEED_HASH
     - Name: $v
       Entry: 7
       Data: 55|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -955,10 +955,10 @@ MonoBehaviour:
       Data: SystemInt32
     - Name: symbolOriginalName
       Entry: 1
-      Data: BANK_HASH
+      Data: AIRSPEED_HASH
     - Name: symbolUniqueName
       Entry: 1
-      Data: BANK_HASH
+      Data: AIRSPEED_HASH
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -991,7 +991,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ALT_HASH
+      Data: PITCH_HASH
     - Name: $v
       Entry: 7
       Data: 58|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -1012,10 +1012,10 @@ MonoBehaviour:
       Data: SystemInt32
     - Name: symbolOriginalName
       Entry: 1
-      Data: ALT_HASH
+      Data: PITCH_HASH
     - Name: symbolUniqueName
       Entry: 1
-      Data: ALT_HASH
+      Data: PITCH_HASH
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1048,7 +1048,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: ROC_HASH
+      Data: BANK_HASH
     - Name: $v
       Entry: 7
       Data: 61|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -1069,10 +1069,10 @@ MonoBehaviour:
       Data: SystemInt32
     - Name: symbolOriginalName
       Entry: 1
-      Data: ROC_HASH
+      Data: BANK_HASH
     - Name: symbolUniqueName
       Entry: 1
-      Data: ROC_HASH
+      Data: BANK_HASH
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1105,13 +1105,127 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: HEADING_HASH
+      Data: ALT_HASH
     - Name: $v
       Entry: 7
       Data: 64|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: fieldSymbol
       Entry: 7
       Data: 65|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
+    - Name: internalType
+      Entry: 9
+      Data: 14
+    - Name: declarationType
+      Entry: 3
+      Data: 2
+    - Name: syncMode
+      Entry: 3
+      Data: 0
+    - Name: symbolResolvedTypeName
+      Entry: 1
+      Data: SystemInt32
+    - Name: symbolOriginalName
+      Entry: 1
+      Data: ALT_HASH
+    - Name: symbolUniqueName
+      Entry: 1
+      Data: ALT_HASH
+    - Name: symbolDefaultValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: fieldAttributes
+      Entry: 7
+      Data: 66|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: userBehaviourSource
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: ROC_HASH
+    - Name: $v
+      Entry: 7
+      Data: 67|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+    - Name: fieldSymbol
+      Entry: 7
+      Data: 68|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
+    - Name: internalType
+      Entry: 9
+      Data: 14
+    - Name: declarationType
+      Entry: 3
+      Data: 2
+    - Name: syncMode
+      Entry: 3
+      Data: 0
+    - Name: symbolResolvedTypeName
+      Entry: 1
+      Data: SystemInt32
+    - Name: symbolOriginalName
+      Entry: 1
+      Data: ROC_HASH
+    - Name: symbolUniqueName
+      Entry: 1
+      Data: ROC_HASH
+    - Name: symbolDefaultValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: fieldAttributes
+      Entry: 7
+      Data: 69|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: userBehaviourSource
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: HEADING_HASH
+    - Name: $v
+      Entry: 7
+      Data: 70|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+    - Name: fieldSymbol
+      Entry: 7
+      Data: 71|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
     - Name: internalType
       Entry: 9
       Data: 14
@@ -1138,7 +1252,64 @@ MonoBehaviour:
       Data: 
     - Name: fieldAttributes
       Entry: 7
-      Data: 66|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+      Data: 72|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: userBehaviourSource
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: HORIG_HASH
+    - Name: $v
+      Entry: 7
+      Data: 73|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
+    - Name: fieldSymbol
+      Entry: 7
+      Data: 74|UdonSharp.Compiler.SymbolDefinition, UdonSharp.Editor
+    - Name: internalType
+      Entry: 9
+      Data: 14
+    - Name: declarationType
+      Entry: 3
+      Data: 2
+    - Name: syncMode
+      Entry: 3
+      Data: 0
+    - Name: symbolResolvedTypeName
+      Entry: 1
+      Data: SystemInt32
+    - Name: symbolOriginalName
+      Entry: 1
+      Data: HORIG_HASH
+    - Name: symbolUniqueName
+      Entry: 1
+      Data: HORIG_HASH
+    - Name: symbolDefaultValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: fieldAttributes
+      Entry: 7
+      Data: 75|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
       Data: 0
