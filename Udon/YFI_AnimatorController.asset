@@ -529,7 +529,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: MAXHORIG
+      Data: MAXSIDEG
     - Name: $v
       Entry: 7
       Data: 33|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -550,10 +550,10 @@ MonoBehaviour:
       Data: SystemInt32
     - Name: symbolOriginalName
       Entry: 1
-      Data: MAXHORIG
+      Data: MAXSIDEG
     - Name: symbolUniqueName
       Entry: 1
-      Data: MAXHORIG
+      Data: MAXSIDEG
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -877,7 +877,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: MAXHORIG_double
+      Data: MAXSIDEG_double
     - Name: $v
       Entry: 7
       Data: 52|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -898,10 +898,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: MAXHORIG_double
+      Data: MAXSIDEG_double
     - Name: symbolUniqueName
       Entry: 1
-      Data: MAXHORIG_double
+      Data: MAXSIDEG_double
     - Name: symbolDefaultValue
       Entry: 6
       Data: 
@@ -1276,7 +1276,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: HORIG_HASH
+      Data: SIDEG_HASH
     - Name: $v
       Entry: 7
       Data: 73|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -1297,10 +1297,10 @@ MonoBehaviour:
       Data: SystemInt32
     - Name: symbolOriginalName
       Entry: 1
-      Data: HORIG_HASH
+      Data: SIDEG_HASH
     - Name: symbolUniqueName
       Entry: 1
-      Data: HORIG_HASH
+      Data: SIDEG_HASH
     - Name: symbolDefaultValue
       Entry: 6
       Data: 

@@ -24,14 +24,14 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     //暂时不考虑航向表有量程
 
     //侧滑这个数值先固定着
-    public int MAXHORIG = 2;
+    public int MAXSIDEG = 2;
     //一些需要提前算好的参数
     private float pitchFixValue = 3.5f;
     private float bankFixValue = 0.5f;
     private float MAXPITCH_double = 40f;
     private float MAXVS_double = 32000f;
     private float MAXBANK_double = 90f;
-    private float MAXHORIG_double = 4f;
+    private float MAXSIDEG_double = 4f;
     //animator strings that are sent every frame are converted to int for optimization
     private int AIRSPEED_HASH = Animator.StringToHash("AirSpeedNormalize");
     private int PITCH_HASH = Animator.StringToHash("PitchAngelNormalize");
@@ -39,19 +39,8 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     private int ALT_HASH = Animator.StringToHash("AltitudeNormalize");
     private int ROC_HASH = Animator.StringToHash("VerticalSpeedNormalize");
     private int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
-    private int HORIG_HASH = Animator.StringToHash("HoriGNormalize");
-    /*
-    private int YAWINPUT_STRING = Animator.StringToHash("yawinput");
-    private int ROLLINPUT_STRING = Animator.StringToHash("rollinput");
-    private int THROTTLE_STRING = Animator.StringToHash("throttle");
-    private int ENGINEOUTPUT_STRING = Animator.StringToHash("engineoutput");
-    private int VTOLANGLE_STRING = Animator.StringToHash("vtolangle");
-    private int HEALTH_STRING = Animator.StringToHash("health");
-    private int AOA_STRING = Animator.StringToHash("AoA");
-    private int MACH10_STRING = Animator.StringToHash("mach10");
-    private int GS_STRING = Animator.StringToHash("Gs");
-    private int FUEL_STRING = Animator.StringToHash("fuel");
-    */
+    private int SIDEG_HASH = Animator.StringToHash("SideGNormalize");
+
     private void Start()
     {
         MAXPITCH_double = 2f * MAXPITCH;
@@ -61,7 +50,7 @@ public class YFI_AnimatorController : UdonSharpBehaviour
         pitchFixValue = (90f - MAXPITCH)/ MAXPITCH_double;
         bankFixValue = (90f - MAXBANK) / MAXBANK_double;
 
-        MAXHORIG_double = 2f * MAXHORIG;
+        MAXSIDEG_double = 2f * MAXSIDEG;
     }
     private void LateUpdate()
     {
@@ -104,11 +93,11 @@ public class YFI_AnimatorController : UdonSharpBehaviour
         }
 
         //Slip
-        float HoriG = (float)YFI_FlightDataInterface.GetProgramVariable("HoriG");
-        float HoriGNormal = HoriG / MAXHORIG_double + 0.5f;
-        if (0.0f < HoriGNormal && HoriGNormal < 1.0f)
+        float SideG = (float)YFI_FlightDataInterface.GetProgramVariable("SideG");
+        float SideGNormal = SideG / MAXSIDEG_double + 0.5f;
+        if (0.0f < SideGNormal && SideGNormal < 1.0f)
         {
-            IndicatorAnimator.SetFloat(HORIG_HASH, HoriGNormal);
+            IndicatorAnimator.SetFloat(SIDEG_HASH, SideGNormal);
         }
 
     }

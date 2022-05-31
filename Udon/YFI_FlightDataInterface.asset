@@ -680,7 +680,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: HoriG
+      Data: SideG
     - Name: $v
       Entry: 7
       Data: 41|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
@@ -701,10 +701,10 @@ MonoBehaviour:
       Data: SystemSingle
     - Name: symbolOriginalName
       Entry: 1
-      Data: HoriG
+      Data: SideG
     - Name: symbolUniqueName
       Entry: 1
-      Data: HoriG
+      Data: SideG
     - Name: symbolDefaultValue
       Entry: 6
       Data: 

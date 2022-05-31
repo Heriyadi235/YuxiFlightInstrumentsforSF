@@ -28,7 +28,7 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
     private float GValue;
     private float AngleOfAttack;
     private float GS;
-    private float HoriG;
+    private float SideG;
     private float Mach;
     private float TAS;
     private float IAS;
@@ -45,10 +45,6 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
     private Vector3 PerdCurrentVelocityVector;
     private Vector3 LerpCurrentVelocityVector;
 
-    //private float DeltaHoriG = 0f;
-    //private float HoriGBefore = 0f;
-    //private float PerdHoriG = 0f;
-    //private float LerpHoriG = 0f;
 
 
     //方法
@@ -97,7 +93,7 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
         //算一下侧向G力(不一定对)
         float gravity = 9.81f * Time.deltaTime;
         Vector3 Gs3 = VehicleTransform.InverseTransformDirection(CurrentVelocityVector - VelocityVectorBefore);
-        HoriG = Gs3.x / gravity; 
+        SideG = Gs3.x / gravity; 
 
         VelocityVectorBefore = CurrentVelocityVector;
         //TODO:下面这玩意是否应该在仪表脚本里(如果有)完成
@@ -111,8 +107,6 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
         {
             LerpCurrentVelocityVector = Vector3.Lerp(LerpCurrentVelocityVector, PerdCurrentVelocityVector, 9f * Time.smoothDeltaTime);
             VelocityVector = LerpCurrentVelocityVector;
-            //LerpHoriG = Mathf.Lerp(LerpHoriG, PerdHoriG, 9f * Time.smoothDeltaTime);
-            //HoriG = LerpHoriG;
         }
 
         //////////
@@ -158,7 +152,7 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
             "\nAltitude: ", Altitude.ToString(),
             "\nGS: ", GS.ToString(),
             "\nTAS: ", TAS.ToString(),
-            "\nHoriG:",HoriG.ToString());
+            "\nSideG:",SideG.ToString());
         }
     }
 }
