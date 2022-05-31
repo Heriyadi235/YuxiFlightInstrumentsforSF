@@ -1,12 +1,12 @@
 # YuxiFlightInstrumentsforSF
 
 ## 简介
-一套飞行仪表系统，用于基于[SaccFlight](https://github.com/Sacchan-VRC/SaccFlightAndVehicles)的VRChat飞行地图。
-目前主要做完了空速表、姿态仪、高度表、转弯协调表、航向指示表与升降计(六大金刚)。
+一套飞行仪表系统，用于基于[SaccFlight](https://github.com/Sacchan-VRC/SaccFlightAndVehicles)制作的VRChat飞行地图。
+目前主要做完了空速表、姿态仪、高度表、转弯协调表、航向指示表与垂直速率表(六大金刚)。
 
 ![一个示意图](https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF/blob/main/documents/pic1.png)
 
-虽然乍一看仪表模型有点简陋(谁让俺不会建模捏)，但是编写脚本时候有考虑到复用性，所以应该可以方便地将其替换为自己的仪表模型，只需设置好动画，无需编写额外的代码。
+上图只是示例仪表模型，有点简陋(俺不太会建模捏)，但编写脚本时有考虑到复用性，所以应该可以方便地将其替换为其他模型，只需设置好动画，无需额外添加代码。
 
 ## 繁介
 咱就是说有一天突然突然想自己做一个SF的机模，翻了翻SaccFlight的代码，然后就突然觉得，UdonSharp也不咋难嘛，花了两三天的时间，补了点开发知识，搞个这么个玩意。
