@@ -5,7 +5,6 @@
 目前主要做完了空速表、姿态仪、高度表、转弯侧滑仪与升降计(六大金刚)。
 
 ![一个示意图](https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF/blob/main/documents/pic1.png)
-这里要插入个图片
 
 虽然乍一看仪表模型有点简陋(谁让俺不会建模捏)，但是编写脚本时候有考虑到复用性，所以应该可以方便地将其替换为自己的仪表模型，只需设置好动画，无需编写额外的代码。
 
