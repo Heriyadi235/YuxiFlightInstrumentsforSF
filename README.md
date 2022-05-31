@@ -2,7 +2,7 @@
 
 ## 简介
 一套飞行仪表系统，用于基于[SaccFlight](https://github.com/Sacchan-VRC/SaccFlightAndVehicles)的VRChat飞行地图。
-目前主要做完了空速表、姿态仪、高度表、转弯侧滑仪与升降计(六大金刚)。
+目前主要做完了空速表、姿态仪、高度表、转弯协调表、航向指示表与升降计(六大金刚)。
 
 ![一个示意图](https://github.com/Heriyadi235/YuxiFlightInstrumentsforSF/blob/main/documents/pic1.png)
 
