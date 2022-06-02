@@ -57,6 +57,7 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
         CenterOfMass = EntityControl.CenterOfMass;
 
         VehicleTransform = (Transform)SAVControl.GetProgramVariable("VehicleTransform");
+        VelocityVectorBefore = (Vector3)SAVControl.GetProgramVariable("CurrentVel");
     }
 
     private void OnEnable()
