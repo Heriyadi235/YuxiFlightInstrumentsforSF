@@ -26,6 +26,6 @@ Material:
     m_Floats:
     - _Glossiness: 0.5
     - _Metallic: 0
-    - _Stencil: 0
+    - _Stencil: 1
     m_Colors:
     - _Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
