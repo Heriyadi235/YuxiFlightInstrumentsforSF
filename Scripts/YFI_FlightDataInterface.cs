@@ -50,14 +50,15 @@ public class YFI_FlightDataInterface : UdonSharpBehaviour
     //方法
     private void Start()
     {
-
+        //use inVeicleOnly to avoid unfind SAVControl error
+        //(or may be I can move some init code to update (try init until SAVController init done,may cause performance issue))
         EntityControl = (SaccEntity)SAVControl.GetProgramVariable("EntityControl");
         SeaLevel = (float)SAVControl.GetProgramVariable("SeaLevel");
         localPlayer = Networking.LocalPlayer;
         CenterOfMass = EntityControl.CenterOfMass;
 
         VehicleTransform = (Transform)SAVControl.GetProgramVariable("VehicleTransform");
-        VelocityVectorBefore = (Vector3)SAVControl.GetProgramVariable("CurrentVel");
+        //VelocityVectorBefore = (Vector3)SAVControl.GetProgramVariable("CurrentVel");
     }
 
     private void OnEnable()
