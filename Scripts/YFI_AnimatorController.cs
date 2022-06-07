@@ -21,10 +21,15 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     public int MAXALT = 10000;
     [Tooltip("爬升率最大量程(英尺/分钟)")]
     public int MAXVS = 16000;
-    //暂时不考虑航向表有量程
-
     //侧滑这个数值先固定着
+    [Tooltip("侧向G力最大数值")]
     public int MAXSIDEG = 2;
+    //暂时不考虑航向表有量程
+    [Tooltip("如果用的是球形陀螺仪，在此放置球的transform(暂时不好使)")]
+    public Transform GyroBall;
+    [Tooltip("0苏式；1西方")]
+    public int GyroBallmodel = 0;
+
     //一些需要提前算好的参数
     private float pitchFixValue = 3.5f;
     private float bankFixValue = 0.5f;
@@ -40,6 +45,16 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     private int ROC_HASH = Animator.StringToHash("VerticalSpeedNormalize");
     private int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
     private int SIDEG_HASH = Animator.StringToHash("SideGNormalize");
+    //set default ball rotation here
+    private Vector3 GyroBallRotationDefault;
+    private float[] GyroBallFacotr = { -2f, 0f };
+   
+    private float PitchAngle = 0f;
+    private float BankAngle = 0f;
+    private float HeadingAngle = 0f;
+
+    private float PitchAngle90 = 0f;
+    private float BankAngle90 = 0f;
 
     private void Start()
     {
@@ -51,55 +66,102 @@ public class YFI_AnimatorController : UdonSharpBehaviour
         bankFixValue = (90f - MAXBANK) / MAXBANK_double;
 
         MAXSIDEG_double = 2f * MAXSIDEG;
+
+        //初始化陀螺仪旋转姿态
+        if (GyroBall != null)
+        {
+         GyroBallRotationDefault = GyroBall.eulerAngles;
+         //  Debug.Log(string.Concat((GyroBallRotationDefault.x)));
+         //  Debug.Log(string.Concat((GyroBallRotationDefault.y)));
+         //  Debug.Log(string.Concat((GyroBallRotationDefault.z)));
+        }
+
     }
     private void LateUpdate()
     {
+        //这里可以用来做仪表更新延迟之类的逻辑
+        PitchAngle = (float)YFI_FlightDataInterface.GetProgramVariable("Pitch");
+        BankAngle = (float)YFI_FlightDataInterface.GetProgramVariable("Bank");
+        HeadingAngle = (float)YFI_FlightDataInterface.GetProgramVariable("Heading");
         //AirSpeed
-        IndicatorAnimator.SetFloat(AIRSPEED_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("TAS")/MAXSPEED);
-        
+        UpdateAirspeed();
         //Altitude
-        IndicatorAnimator.SetFloat(ALT_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("Altitude") / MAXALT);
-
+        UpdateAltitude();
         //VS
+        UpdateVerticalSpeed();
+        //Heading
+        UpdateHeading();
+        //Bank
+        UpdateBank();
+        //Slip
+        UpdateSlip();
+        //goryball
+        //Pitch
+        if (GyroBall != null)
+        {
+
+            UpdateGyroBall();
+        }
+        else
+        {
+            UpdatePitch();
+        }
+
+
+    }
+    private void UpdateGyroBall()
+    {
+        GyroBall.eulerAngles = GyroBallRotationDefault + new Vector3(GyroBallFacotr[GyroBallmodel] * PitchAngle, HeadingAngle, 0);
+    }
+    private void UpdateAirspeed()
+    {
+        IndicatorAnimator.SetFloat(AIRSPEED_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("TAS") / MAXSPEED);
+    }
+    private void UpdateAltitude()
+    {
+        IndicatorAnimator.SetFloat(ALT_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("Altitude") / MAXALT);
+    }
+    private void UpdateVerticalSpeed()
+    {
         float VerticalSpeedNormal = (float)YFI_FlightDataInterface.GetProgramVariable("RateOfClimb") / MAXVS_double + 0.5f;
         if (0.0f < VerticalSpeedNormal && VerticalSpeedNormal < 1.0f)
-        { 
-            IndicatorAnimator.SetFloat(ROC_HASH, VerticalSpeedNormal); 
+        {
+            IndicatorAnimator.SetFloat(ROC_HASH, VerticalSpeedNormal);
         }
-
-        //Heading
-        IndicatorAnimator.SetFloat(HEADING_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("Heading") / 360f);
-        
-        //Pitch
-        float PitchAngle90 = ((float)YFI_FlightDataInterface.GetProgramVariable("Pitch")  < 270f) ?
-            ((float)YFI_FlightDataInterface.GetProgramVariable("Pitch") + 90f) :
-            ((float)YFI_FlightDataInterface.GetProgramVariable("Pitch") - 270f);
-
+    }
+    private void UpdateHeading()
+    {
+        IndicatorAnimator.SetFloat(HEADING_HASH, HeadingAngle / 360f);
+    }
+    private void UpdatePitch()
+    {
+        PitchAngle90 = (PitchAngle < 270f) ?
+            (PitchAngle + 90f) :
+            (PitchAngle - 270f);
         float PitchNormal = PitchAngle90 / MAXPITCH_double - pitchFixValue;
         if (0.0f < PitchNormal && PitchNormal < 1.0f)
-        { 
-            IndicatorAnimator.SetFloat(PITCH_HASH, PitchNormal); 
+        {
+            IndicatorAnimator.SetFloat(PITCH_HASH, PitchNormal);
         }
-
-        //Bank
-        float BankAngle90 = ((float)YFI_FlightDataInterface.GetProgramVariable("Bank") < 270f) ?
-            ((float)YFI_FlightDataInterface.GetProgramVariable("Bank") + 90f) :
-            ((float)YFI_FlightDataInterface.GetProgramVariable("Bank") - 270f);
-
+    }
+    private void UpdateBank()
+    {
+        BankAngle90 = (BankAngle < 270f) ?
+            (BankAngle + 90f) :
+            (BankAngle - 270f);
         float BankNormal = BankAngle90 / MAXBANK_double - bankFixValue;
         if (0.0f < BankNormal && BankNormal < 1.0f)
-        {    
-            IndicatorAnimator.SetFloat(BANK_HASH, BankNormal); 
+        {
+            IndicatorAnimator.SetFloat(BANK_HASH, BankNormal);
         }
-
-        //Slip
+    }
+    private void UpdateSlip()
+    {
         float SideG = (float)YFI_FlightDataInterface.GetProgramVariable("SideG");
         float SideGNormal = SideG / MAXSIDEG_double + 0.5f;
         if (0.0f < SideGNormal && SideGNormal < 1.0f)
         {
             IndicatorAnimator.SetFloat(SIDEG_HASH, SideGNormal);
         }
-
     }
-
 }
