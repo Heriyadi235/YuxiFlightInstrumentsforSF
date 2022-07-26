@@ -19,13 +19,15 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     public int MAXBANK = 45;
     [Tooltip("高度表最大量程(英尺)")]
     public int MAXALT = 10000;
+    [Tooltip("高度表万位最大量程(英尺)")]
+    public int MAXALT10000 = 100000;
     [Tooltip("爬升率最大量程(英尺/分钟)")]
     public int MAXVS = 16000;
     //侧滑这个数值先固定着
     [Tooltip("侧向G力最大数值")]
     public int MAXSIDEG = 2;
     //暂时不考虑航向表有量程
-    [Tooltip("如果用的是球形陀螺仪，在此放置球的transform(暂时不好使)")]
+    [Tooltip("如果用的是球形陀螺仪，在此放置球的transform")]
     public Transform GyroBall;
     [Tooltip("0苏式；1西方")]
     public int GyroBallmodel = 0;
@@ -42,6 +44,7 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     private int PITCH_HASH = Animator.StringToHash("PitchAngelNormalize");
     private int BANK_HASH = Animator.StringToHash("BankAngelNormalize");
     private int ALT_HASH = Animator.StringToHash("AltitudeNormalize");
+    private int ALT10000_HASH = Animator.StringToHash("Altitude10000Normalize");
     private int ROC_HASH = Animator.StringToHash("VerticalSpeedNormalize");
     private int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
     private int SIDEG_HASH = Animator.StringToHash("SideGNormalize");
@@ -120,6 +123,7 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     private void UpdateAltitude()
     {
         IndicatorAnimator.SetFloat(ALT_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("Altitude") / MAXALT);
+        IndicatorAnimator.SetFloat(ALT10000_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("Altitude") / MAXALT10000);
     }
     private void UpdateVerticalSpeed()
     {
