@@ -10,7 +10,7 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     public UdonSharpBehaviour YFI_FlightDataInterface;
     [Tooltip("仪表的动画控制器")]
     public Animator IndicatorAnimator;
-
+    [Header("下面的量程都是单侧的")]
     [Tooltip("速度表最大量程(节)")]
     public int MAXSPEED = 500;
     [Tooltip("俯仰角最大量程(度)")]
@@ -19,31 +19,42 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     public int MAXBANK = 45;
     [Tooltip("高度表最大量程(英尺)")]
     public int MAXALT = 10000;
-    [Tooltip("高度表万位最大量程(英尺)")]
-    public int MAXALT10000 = 100000;
+    [Header("对于数字每一位都需要单独动画的仪表")]
+    public bool altbybit = false;
+    //[Tooltip("高度表万位最大示数")]
+    //public int MAXALT10000 = 10;
+    [Tooltip("一些罗盘动画起始角度并不为0")]
+    public int HDGoffset = 0;
     [Tooltip("爬升率最大量程(英尺/分钟)")]
     public int MAXVS = 16000;
     //侧滑这个数值先固定着
     [Tooltip("侧向G力最大数值")]
     public int MAXSIDEG = 2;
     //暂时不考虑航向表有量程
-    [Tooltip("如果用的是球形陀螺仪，在此放置球的transform")]
+    [Tooltip("如果用的是球形陀螺仪，在此放置球的transform(弃用了)")]
     public Transform GyroBall;
     [Tooltip("0苏式；1西方")]
     public int GyroBallmodel = 0;
 
     //一些需要提前算好的参数
+    //归一化的过程是ax+b FixValue的作用就是b
     private float pitchFixValue = 3.5f;
     private float bankFixValue = 0.5f;
+    //double:原数值的二倍
     private float MAXPITCH_double = 40f;
     private float MAXVS_double = 32000f;
     private float MAXBANK_double = 90f;
     private float MAXSIDEG_double = 4f;
+    //
+    private float altitude = 0f;
     //animator strings that are sent every frame are converted to int for optimization
     private int AIRSPEED_HASH = Animator.StringToHash("AirSpeedNormalize");
     private int PITCH_HASH = Animator.StringToHash("PitchAngelNormalize");
     private int BANK_HASH = Animator.StringToHash("BankAngelNormalize");
     private int ALT_HASH = Animator.StringToHash("AltitudeNormalize");
+    private int ALT10_HASH = Animator.StringToHash("Altitude10Normalize");
+    private int ALT100_HASH = Animator.StringToHash("Altitude100Normalize");
+    private int ALT1000_HASH = Animator.StringToHash("Altitude1000Normalize");
     private int ALT10000_HASH = Animator.StringToHash("Altitude10000Normalize");
     private int ROC_HASH = Animator.StringToHash("VerticalSpeedNormalize");
     private int HEADING_HASH = Animator.StringToHash("HeadingNormalize");
@@ -56,7 +67,8 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     private float BankAngle = 0f;
     private float HeadingAngle = 0f;
 
-    private float PitchAngle90 = 0f;
+    
+    private float PitchAngle90 = 0f; 
     private float BankAngle90 = 0f;
 
     private void Start()
@@ -99,6 +111,7 @@ public class YFI_AnimatorController : UdonSharpBehaviour
         //Slip
         UpdateSlip();
         //goryball
+
         //Pitch
         if (GyroBall != null)
         {
@@ -114,6 +127,8 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     }
     private void UpdateGyroBall()
     {
+        //TODO:如何不显示航向？
+        
         GyroBall.eulerAngles = GyroBallRotationDefault + new Vector3(GyroBallFacotr[GyroBallmodel] * PitchAngle, HeadingAngle, 0);
     }
     private void UpdateAirspeed()
@@ -122,8 +137,19 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     }
     private void UpdateAltitude()
     {
-        IndicatorAnimator.SetFloat(ALT_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("Altitude") / MAXALT);
-        IndicatorAnimator.SetFloat(ALT10000_HASH, (float)YFI_FlightDataInterface.GetProgramVariable("Altitude") / MAXALT10000);
+
+        //默认都会写Altitude
+        altitude = (float)YFI_FlightDataInterface.GetProgramVariable("Altitude");
+
+        IndicatorAnimator.SetFloat(ALT_HASH, (altitude / MAXALT));
+        if (altbybit)
+        {
+            IndicatorAnimator.SetFloat(ALT10_HASH, (altitude % 100) / 100f);
+            IndicatorAnimator.SetFloat(ALT100_HASH, ((int)(altitude/100f) % 10) / 10f);
+            IndicatorAnimator.SetFloat(ALT1000_HASH, ((int)(altitude/1000f) % 10) / 10f);
+            IndicatorAnimator.SetFloat(ALT10000_HASH, ((int)(altitude/10000f) % 10) / 10f);
+        }
+        
     }
     private void UpdateVerticalSpeed()
     {
@@ -135,7 +161,7 @@ public class YFI_AnimatorController : UdonSharpBehaviour
     }
     private void UpdateHeading()
     {
-        IndicatorAnimator.SetFloat(HEADING_HASH, HeadingAngle / 360f);
+        IndicatorAnimator.SetFloat(HEADING_HASH, (HeadingAngle- HDGoffset) / 360f);
     }
     private void UpdatePitch()
     {

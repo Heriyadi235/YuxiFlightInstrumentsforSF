@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: YFI_FlightDataInterface
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: a4dcf9e12221e5840bb65df6f37c4a70,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: e7be3f13b439d624ab8f9d55fb62e55a,
     type: 2}
   udonAssembly: 
   assemblyError: 
@@ -194,7 +194,7 @@ MonoBehaviour:
       Data: 12|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: SaccEntity, Assembly-CSharp
+      Data: SaccFlightAndVehicles.SaccEntity, SaccFlightAndVehicles.Runtime
     - Name: 
       Entry: 8
       Data: 
