@@ -47,7 +47,7 @@ AnimatorState:
   m_SpeedParameter: AirSpeedNormalize
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: SideGNormalize
+  m_TimeParameter: SlipAngleNormalize
 --- !u!1107 &-4468335499695415874
 AnimatorStateMachine:
   serializedVersion: 6
@@ -92,7 +92,7 @@ AnimatorState:
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: BankAngelNormalize
+  m_TimeParameter: BankAngleNormalize
 --- !u!1102 &-3502455247799722197
 AnimatorState:
   serializedVersion: 6
@@ -101,7 +101,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: New State
-  m_Speed: 1
+  m_Speed: -1
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -118,7 +118,7 @@ AnimatorState:
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: PitchAngelNormalize
+  m_TimeParameter: PitchAngleNormalize
 --- !u!1102 &-2852967187508179828
 AnimatorState:
   serializedVersion: 6
@@ -256,13 +256,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: PitchAngelNormalize
+  - m_Name: PitchAngleNormalize
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: BankAngelNormalize
+  - m_Name: BankAngleNormalize
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -286,7 +286,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: SideGNormalize
+  - m_Name: SlipAngleNormalize
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0

@@ -5,8 +5,9 @@ using VRC.Udon;
 using UnityEngine.UI;
 using SaccFlightAndVehicles;
 
-
-[UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+namespace YuxiFlightInstruments.BasicFlightData
+{
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class YFI_FlightDataInterface : UdonSharpBehaviour
     {
         /*2022-05-28
@@ -14,152 +15,144 @@ using SaccFlightAndVehicles;
          * 需要显示的参数先给整出来
          * 然后之后的仪表从这里读数据，生成transform
          */
-        [Tooltip("这里是SAVControl")]
-        public UdonSharpBehaviour SAVControl;
-        //[Tooltip("用动画器做仪表变形的控制")]
+
+        /*2022-12-23
+         * 大重构
+         * 支持了航迹计算
+         * 加入了命名空间
+         * 现在作为SF_EXT
+         * TODO: add owml support
+         */
+
+        public SaccEntity entityControl;
+        public SaccAirVehicle SAVControl;    
+
         [Tooltip("Debug Output Text")]
-        public Text DebugOut;
-    
-        private SaccEntity EntityControl;
+        public Text DebugOutput;
+
         private Transform VehicleTransform;
-        VRCPlayerApi localPlayer;
-
-        private Transform CenterOfMass;
         //下面定义了关键的飞行参数们
-        private Vector3 VelocityVector;
-        private float GValue;
-        private float AngleOfAttack;
-        private float GS;
-        private float SideG;
-        private float Mach;
-        private float TAS;
-        private float IAS;
-        private float RateOfClimb;
-        private float Altitude;
-        private float Heading;
-        private float Pitch;
-        private float Bank;
-        private float SeaLevel; 
+        //飞行参数
+        [System.NonSerialized] public float altitude = 0; //barometric altitude in ft = center of mass position.y - sealevel 
+        [System.NonSerialized] public float groundSpeed = 0; //center of mass .velocity
+        [System.NonSerialized] public float TAS = 0; //center of mass .velocity - wind.velocity
+        [System.NonSerialized] public float heading = 0; //center of mass .eulerAngles.y + magnetic Declination
+        [System.NonSerialized] public float magneticHeading = 0;//center of mass .eulerAngles.y
+        [System.NonSerialized] public float pitch = 0;//-180-0-180 抬头为正 center of mass .eulerAngles.z
+        [System.NonSerialized] public float bank = 0; //-180-0-180 右滚为正 center of mass .eulerAngles.x
+        [System.NonSerialized] public float verticalSpeed = 0; //爬升率 in ft/min
+        [System.NonSerialized] public float verticalG = 0; //垂直G
+        [System.NonSerialized] public float angleOfAttack = 0; //水平攻角与垂直攻角中间的大值
+        [System.NonSerialized] public float mach = 0; //水平攻角与垂直攻角中间的大值
+
+        //航迹信息
+        [System.NonSerialized] public float trackPitchAngle = 0; //航迹俯仰角 向上为正
+        [System.NonSerialized] public float SlipAngle = 0; //侧滑角 向右为正
 
 
-        private Vector3 DeltaVelocityVector;
-        private Vector3 VelocityVectorBefore;
-        private Vector3 PerdCurrentVelocityVector;
-        private Vector3 LerpCurrentVelocityVector;
+        [Tooltip("磁偏角")]
+        public float magneticDeclination = 0;
 
+        private Vector3 currentVelocity = Vector3.zero; //航迹矢量
 
+        private bool PlayerInVehicle = false;
 
         //方法
         private void Start()
         {
-            //use inVeicleOnly to avoid unfind SAVControl error
-            //(or may be I can move some init code to update (try init until SAVController init done,may cause performance issue))
-            EntityControl = (SaccEntity)SAVControl.GetProgramVariable("EntityControl");
-            SeaLevel = (float)SAVControl.GetProgramVariable("SeaLevel");
-            localPlayer = Networking.LocalPlayer;
-            CenterOfMass = EntityControl.CenterOfMass;
 
-            VehicleTransform = (Transform)SAVControl.GetProgramVariable("VehicleTransform");
-            //VelocityVectorBefore = (Vector3)SAVControl.GetProgramVariable("CurrentVel");
+        }
+        public void SFEXT_O_PilotEnter()
+        {
+            PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+        }
+        public void SFEXT_O_PilotExit()
+        {
+            PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+        }
+        public void SFEXT_P_PassengerEnter()
+        {
+            PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+        }
+        public void SFEXT_P_PassengerExit()
+        {
+            PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+        }
+        public void SFEXT_L_EntityStart()
+        {
+            entityControl = GetComponentInParent<SaccEntity>();
+            SAVControl = (SaccAirVehicle)entityControl.GetExtention(GetUdonTypeName<SaccAirVehicle>());
+            VehicleTransform = entityControl.transform;
+            PlayerInVehicle = false;
+            FlightDataUpdate();
+        }
+
+        private void FlightDataUpdate()
+        {
+            //可以直接从SAV获取的参数
+            //TODO:地速与TAS包含了垂直速度？
+            //地速
+            groundSpeed = SAVControl.Speed * 1.94384f;
+            //TAS
+            TAS = SAVControl.AirSpeed * 1.94384f;
+            //垂直G力
+            verticalG = SAVControl.VertGs;
+            //攻角
+            angleOfAttack = SAVControl.AngleOfAttack;
+            //获取航迹矢量
+            currentVelocity = SAVControl.CurrentVel.magnitude > 0.5f ? SAVControl.CurrentVel : Vector3.zero;
+
+            //需要稍微算一下的参数
+            //航向
+            heading = SAVControl.CenterOfMass.eulerAngles.y;
+            heading = (heading + magneticDeclination + 360) % 360;
+            magneticHeading = (heading + 360) % 360;
+            //俯仰
+            pitch = -SAVControl.CenterOfMass.eulerAngles.x;
+            pitch = pitch < -180 ? (360 + pitch) : pitch;
+            //坡度
+            bank = -SAVControl.CenterOfMass.eulerAngles.z;
+            bank = bank < -180 ? (360 + bank) : bank;
+            //高度
+            altitude = (SAVControl.CenterOfMass.position.y - SAVControl.SeaLevel) * 3.28084f;
+            //垂直速度
+            verticalSpeed = currentVelocity.y * 60 * 3.28084f;
+
+            //马赫数 TODO:当地声速=sqrt(kRT)
+            mach = SAVControl.AirSpeed / 343f;
+
+            //航迹参数计算
+            Vector3 vecForward = VehicleTransform.forward;
+            trackPitchAngle = -Vector3.SignedAngle(vecForward, Vector3.ProjectOnPlane(currentVelocity, VehicleTransform.right), VehicleTransform.right);
+            SlipAngle = Vector3.SignedAngle(vecForward, Vector3.ProjectOnPlane(currentVelocity, VehicleTransform.up), VehicleTransform.up);
         }
 
         private void OnEnable()
         {
             return;
         }
-        private void FixedUpdate()
+
+        private void Update()
         {
-            //0530 因为需要在外面计算侧向G力，不得已使用了fixUpdate
-            //TODO:如果性能出现问题，限制此处的更新频率
-            //我觉得时间平滑不用在这里实现，但是肯定要考虑不是每一个frame都调用以减少开销
-            //float SmoothDeltaTime = Time.smoothDeltaTime;
-
-            //获取速度向量
-            //SAV中CurrentVel是飞行器速度向量，本质上小飞机所在位置就是1s(?)后的飞机位置
-            Vector3 CurrentVelocityVector = (Vector3)SAVControl.GetProgramVariable("CurrentVel");
-
-            //(在绘制AHI时再做投影)
-            //低速时，让箭头垂直向下
-            if (CurrentVelocityVector.magnitude < 2)//差不多是4节以下
+            if (PlayerInVehicle)
             {
-                CurrentVelocityVector = Vector3.down * 2;//straight down instead of spazzing out when moving very slow
-            }
-            else 
-            {
-                //插值操作，做平滑
-                if (CurrentVelocityVector != VelocityVectorBefore)
+                FlightDataUpdate();
+                /*
+                if (DebugOutput)
                 {
-                    DeltaVelocityVector = (CurrentVelocityVector - VelocityVectorBefore) / Time.deltaTime;
-                };
-                PerdCurrentVelocityVector = CurrentVelocityVector + DeltaVelocityVector * Time.deltaTime; 
+                    DebugOutput.text = string.Concat("Headin: ", heading.ToString(),
+                    "\nPitch: ", pitch.ToString(),
+                    "\nBank: ", bank.ToString(),
+                    "\nTRKPitch: ", trackPitchAngle.ToString(),
+                    "\nSlipAngel: ", SlipAngle.ToString(),
+                    "\nMach: ", mach.ToString(),
+                    "\nVS: ", verticalSpeed.ToString(),
+                    "\nAltitude: ", altitude.ToString(),
+                    "\nGS: ", groundSpeed.ToString(),
+                    "\nTAS: ", TAS.ToString());
+                }
+                */
             }
-
-            //算一下侧向G力(不一定对)
-            //TODO:这里好像总出问题
-            
-            float gravity = 9.81f * Time.deltaTime;
-            Vector3 Gs3 = VehicleTransform.InverseTransformDirection(CurrentVelocityVector - VelocityVectorBefore);
-            SideG = Gs3.x / gravity;
-            
-            VelocityVectorBefore = CurrentVelocityVector;
-            //TODO:下面这玩意是否应该在仪表脚本里(如果有)完成
-            //TODO:是否需要正则化？
-            if ((bool)SAVControl.GetProgramVariable("IsOwner"))
-            {
-                VelocityVector = PerdCurrentVelocityVector;
-            
-            }
-            else
-            {
-                LerpCurrentVelocityVector = Vector3.Lerp(LerpCurrentVelocityVector, PerdCurrentVelocityVector, 9f * Time.smoothDeltaTime);
-                VelocityVector = LerpCurrentVelocityVector;
-            }
-
-            //////////
-
-            Vector3 VehicleEuler = EntityControl.transform.rotation.eulerAngles;
-            //航向
-            //Heading = (Quaternion.Euler(new Vector3(0, -VehicleEuler.y, 0)));
-            //float angle = Quaternion.Angle(transform.rotation, target.rotation);
-            Heading = VehicleEuler.y;
-            //俯仰
-            //Pitch = Quaternion.Euler(new Vector3(0, VehicleEuler.y, 0));
-            Pitch = VehicleEuler.x;
-            //坡度
-            //Bank = Quaternion.Euler(new Vector3(0, 0, -VehicleEuler.z));
-            Bank = VehicleEuler.z;
-            //过载
-            GValue = ((float)SAVControl.GetProgramVariable("VertGs"));
-            //攻角
-            AngleOfAttack = ((float)SAVControl.GetProgramVariable("AngleOfAttack"));
-            //马赫数
-            Mach = ((float)SAVControl.GetProgramVariable("Speed")) / 343f;
-            //爬升率
-            RateOfClimb = ((Vector3)SAVControl.GetProgramVariable("CurrentVel")).y * 60 * 3.28084f;
-            //高度
-            Altitude = (CenterOfMass.position.y - SeaLevel) * 3.28084f;
-
-            //SAV里的speed是地速 airspeed是TAS
-            //SAV里使用的是IS，所以这里要把秒换算为节
-            //地速
-            GS = ((float)SAVControl.GetProgramVariable("Speed")) *1.9438445f;
-            //真空速
-            TAS = ((float)SAVControl.GetProgramVariable("AirSpeed")) *1.9438445f;
-
-            if (DebugOut)
-            {
-                DebugOut.text = string.Concat("Headin: ", Heading.ToString(),
-                "\nPitch: ", Pitch.ToString(),
-                "\nBank: ", Bank.ToString(),
-                "\nG: ", GValue.ToString(),
-                "\nAOA: ", AngleOfAttack.ToString(),
-                "\nMach: ", Mach.ToString(),
-                "\nROC: ", RateOfClimb.ToString(),
-                "\nAltitude: ", Altitude.ToString(),
-                "\nGS: ", GS.ToString(),
-                "\nTAS: ", TAS.ToString(),
-                "\nSideG:", SideG.ToString());
-            
         }
     }
 }
