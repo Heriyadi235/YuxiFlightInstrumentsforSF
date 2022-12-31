@@ -36,8 +36,8 @@ namespace YuxiFlightInstruments.BasicFlightData
         [System.NonSerialized] public float altitude = 0; //barometric altitude in ft = center of mass position.y - sealevel 
         [System.NonSerialized] public float groundSpeed = 0; //center of mass .velocity
         [System.NonSerialized] public float TAS = 0; //center of mass .velocity - wind.velocity
-        [System.NonSerialized] public float heading = 0; //center of mass .eulerAngles.y + magnetic Declination
-        [System.NonSerialized] public float magneticHeading = 0;//center of mass .eulerAngles.y
+        [System.NonSerialized] public float heading = 0; // 0-360 center of mass .eulerAngles.y 
+        [System.NonSerialized] public float magneticHeading = 0;// 0-360 center of mass .eulerAngles.y - magnetic Declination
         [System.NonSerialized] public float pitch = 0;//-180-0-180 抬头为正 center of mass .eulerAngles.z
         [System.NonSerialized] public float bank = 0; //-180-0-180 右滚为正 center of mass .eulerAngles.x
         [System.NonSerialized] public float verticalSpeed = 0; //爬升率 in ft/min
@@ -51,7 +51,7 @@ namespace YuxiFlightInstruments.BasicFlightData
 
 
         [Tooltip("磁偏角")]
-        public float magneticDeclination = 0;
+        public float magneticDeclination = 0;//西偏于真北为负 
 
         private Vector3 currentVelocity = Vector3.zero; //航迹矢量
 
@@ -105,8 +105,8 @@ namespace YuxiFlightInstruments.BasicFlightData
             //需要稍微算一下的参数
             //航向
             heading = SAVControl.CenterOfMass.eulerAngles.y;
-            heading = (heading + magneticDeclination + 360) % 360;
-            magneticHeading = (heading + 360) % 360;
+            heading = (heading + 360) % 360;
+            magneticHeading = (heading - magneticDeclination + 360) % 360;
             //俯仰
             pitch = -SAVControl.CenterOfMass.eulerAngles.x;
             pitch = pitch < -180 ? (360 + pitch) : pitch;

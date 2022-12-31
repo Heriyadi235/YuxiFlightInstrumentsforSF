@@ -78,7 +78,7 @@ namespace YuxiFlightInstruments.AnimationDriver
                 //这里可以用来做仪表更新延迟之类的逻辑
                 PitchAngle = FlightData.pitch;
                 BankAngle = FlightData.bank;
-                HeadingAngle = FlightData.heading;
+                HeadingAngle = FlightData.magneticHeading;
                 //AirSpeed
                 UpdateAirspeed();
                 //Altitude
@@ -157,7 +157,7 @@ namespace YuxiFlightInstruments.AnimationDriver
         private float Remap01(float value, float valueMin, float valueMax)
             {
                 value = Mathf.Clamp01((value - valueMin) / (valueMax - valueMin));
-                return (value == 1 )? 0.99999f : value;
+                return value;
             }
         }
 }
