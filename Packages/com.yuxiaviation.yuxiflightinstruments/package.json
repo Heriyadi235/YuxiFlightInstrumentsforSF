@@ -1,0 +1,14 @@
+{
+  "name": "com.yuxiaviation.yuxiflightinstruments",
+  "displayName": "com.yuxiaviation.yuxiflightinstruments",
+  "version": "0.0.1",
+  "description": "Describe this Package",
+  "dependencies": {},
+  "gitDependencies": {},
+  "vpmDependencies": {
+    "com.vrchat.clientsim": "1.2.2"
+  },
+  "legacyFolders": {},
+  "legacyFiles": {},
+  "localPath": "D:\\UnityProject\\Yuxi Aviation Institute\\Packages\\com.yuxiaviation.yuxiflightinstruments"
+}

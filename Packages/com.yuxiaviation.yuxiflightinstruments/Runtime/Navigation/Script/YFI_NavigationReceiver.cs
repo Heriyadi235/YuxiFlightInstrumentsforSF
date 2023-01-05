@@ -23,9 +23,14 @@ namespace YuxiFlightInstruments.Navigation
         [System.NonSerialized] public bool isHSI = true; //是否自动判断向台背台
         [System.NonSerialized] public float omnibearing = 0; //模拟改变OBS时，VOR方位角变化，此时有 azimuthofPlane=-magneticDeclination-omnibearing =azimuthofPlane，HSI下omnibearing = magneticHeading"
         [System.NonSerialized] public float GSAngle = 0; //下滑道偏差角, 飞机偏上时为负
+        [System.NonSerialized] public bool GSCapture = false;
         //public string DebugOut;
         public bool hasBeaconSelected = false;
         public YFI_GroundRadioBeacons SelectedBeacon = null;
+
+        [Tooltip("second")]
+        public float updateInterval = 0.3f;
+        private float sinceLastUpdate = 0;
         void Start()
         {
             ValidateFrequency();
@@ -33,8 +38,12 @@ namespace YuxiFlightInstruments.Navigation
 
         private void Update()
         {
-            if (hasBeaconSelected)
+            sinceLastUpdate += Time.deltaTime;
+            bool updateFlag = sinceLastUpdate > updateInterval;
+            if (hasBeaconSelected || updateFlag)
             {
+                sinceLastUpdate = 0;
+
                 //接收机会计算出所有参数，显示时再判断类型决定输出哪些参数
                 //计算距离
                 distance = (gameObject.transform.position - SelectedBeacon.transform.position).magnitude;
@@ -51,7 +60,8 @@ namespace YuxiFlightInstruments.Navigation
                     //下滑道计算
                     GSAngle = Vector3.SignedAngle(Vector3.up,Vector3.ProjectOnPlane(SelectedBeacon.glideSlopeStation.position - gameObject.transform.position, SelectedBeacon.glideSlopeStation.right), SelectedBeacon.glideSlopeStation.right);
                     GSAngle = (90 + 3) - GSAngle; //先写死一个3度下滑角
-                    GSAngle = Mathf.Abs(GSAngle) > 90 ? 0 : GSAngle;
+                    if (Mathf.Abs(GSAngle) > 90) GSCapture = false;
+                    else GSCapture = true;
                 }
                 else if (isHSI || SelectedBeacon.beaconType == BeaconType.NDB) omnibearing = flightData.magneticHeading;
                 var omnibearingVector = new Vector2(Mathf.Sin(omnibearing * Mathf.PI / 180), Mathf.Cos(omnibearing * Mathf.PI / 180));

@@ -63,6 +63,7 @@ MonoBehaviour:
   flightData: {fileID: 0}
   hasBeaconSelected: 0
   SelectedBeacon: {fileID: 0}
+  updateInterval: 0.3
 --- !u!114 &2835810245304366281
 MonoBehaviour:
   m_ObjectHideFlags: 0

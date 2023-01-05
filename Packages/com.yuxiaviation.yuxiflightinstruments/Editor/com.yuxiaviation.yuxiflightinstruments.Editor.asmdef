@@ -1,0 +1,14 @@
+{
+  "name": "com.yuxiaviation.yuxiflightinstruments.Editor",
+  "references": [
+    "com.yuxiaviation.yuxiflightinstruments"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "defineConstraints": [],
+  "optionalUnityReferences": []
+}
