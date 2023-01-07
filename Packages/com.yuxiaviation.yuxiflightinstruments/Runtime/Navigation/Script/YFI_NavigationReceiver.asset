@@ -176,7 +176,7 @@ MonoBehaviour:
       Data: 10|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: YuxiFlightInstruments.Navigation.YFI_GroundRadioBeacons[], Assembly-CSharp
+      Data: YuxiFlightInstruments.Navigation.YFI_GroundRadioBeacons[], com.yuxiaviation.yuxiflightinstruments
     - Name: 
       Entry: 8
       Data: 
@@ -236,7 +236,7 @@ MonoBehaviour:
       Data: 14|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: YuxiFlightInstruments.BasicFlightData.YFI_FlightDataInterface, Assembly-CSharp
+      Data: YuxiFlightInstruments.BasicFlightData.YFI_FlightDataInterface, com.yuxiaviation.yuxiflightinstruments
     - Name: 
       Entry: 8
       Data: 
@@ -782,7 +782,7 @@ MonoBehaviour:
       Data: 45|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: YuxiFlightInstruments.Navigation.YFI_GroundRadioBeacons, Assembly-CSharp
+      Data: YuxiFlightInstruments.Navigation.YFI_GroundRadioBeacons, com.yuxiaviation.yuxiflightinstruments
     - Name: 
       Entry: 8
       Data: 

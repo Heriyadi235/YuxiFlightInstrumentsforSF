@@ -1,14 +1,17 @@
 {
-  "name": "com.yuxiaviation.yuxiflightinstruments.Editor",
-  "references": [
-    "com.yuxiaviation.yuxiflightinstruments"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "autoReferenced": true,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "defineConstraints": [],
-  "optionalUnityReferences": []
+    "name": "com.yuxiaviation.yuxiflightinstruments.Editor",
+    "references": [
+        "com.yuxiaviation.yuxiflightinstruments"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "Editor"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

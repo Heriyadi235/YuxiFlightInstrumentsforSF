@@ -25,8 +25,8 @@ namespace YuxiFlightInstruments.BasicFlightData
          */
 
         public SaccEntity entityControl;
-        public SaccAirVehicle SAVControl;    
-
+        public SaccAirVehicle SAVControl;
+        public Transform OWMLMap;
         [Tooltip("Debug Output Text")]
         public Text DebugOutput;
 
@@ -60,7 +60,7 @@ namespace YuxiFlightInstruments.BasicFlightData
         //方法
         private void Start()
         {
-
+            OWMLMap = GameObject.Find("/MapObject").transform;
         }
         public void SFEXT_O_PilotEnter()
         {
@@ -114,7 +114,8 @@ namespace YuxiFlightInstruments.BasicFlightData
             bank = -SAVControl.CenterOfMass.eulerAngles.z;
             bank = bank < -180 ? (360 + bank) : bank;
             //高度
-            altitude = (SAVControl.CenterOfMass.position.y - SAVControl.SeaLevel) * 3.28084f;
+            //altitude = (SAVControl.CenterOfMass.position.y - SAVControl.SeaLevel) * 3.28084f;
+            altitude = (SAVControl.CenterOfMass.position.y - SAVControl.SeaLevel - (OWMLMap != null ? OWMLMap.position.y : 0)) * 3.28084f;
             //垂直速度
             verticalSpeed = currentVelocity.y * 60 * 3.28084f;
 

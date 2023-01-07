@@ -62,7 +62,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: YuxiFlightInstruments.YFI_SPDControl, Assembly-CSharp
+      Data: YuxiFlightInstruments.YFI_SPDControl, com.yuxiaviation.yuxiflightinstruments
     - Name: 
       Entry: 8
       Data: 
