@@ -5,15 +5,24 @@ using VRC.SDKBase;
 using VRC.Udon;
 using YuxiFlightInstruments.BasicFlightData;
 
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UdonSharpEditor;
+#endif
+
 namespace YuxiFlightInstruments.Navigation
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]//不同步，频率同步在其上一层实现
     public class YFI_NavigationReceiver : UdonSharpBehaviour
     {
         public float frequency = 114.5f;
-        [UdonSynced] public int beaconIndex = 0;
+        [UdonSynced] public int beaconIndex = 0; //随便一写，从1开始
         public YFI_GroundRadioBeacons[] Beacons;
         public YFI_FlightDataInterface flightData;
+        public bool autoSetupBeforeSave = true;
 
         //[HeaderAttribute("导航参数")]
         [System.NonSerialized] public float distance = 10f; //距离m DME
@@ -40,7 +49,7 @@ namespace YuxiFlightInstruments.Navigation
         {
             sinceLastUpdate += Time.deltaTime;
             bool updateFlag = sinceLastUpdate > updateInterval;
-            if (hasBeaconSelected || updateFlag)
+            if (hasBeaconSelected && updateFlag)
             {
                 sinceLastUpdate = 0;
 
@@ -87,7 +96,7 @@ namespace YuxiFlightInstruments.Navigation
 
         public void OnNextFreq()
         {
-            beaconIndex = beaconIndex + 1 >= Beacons.Length ? beaconIndex : beaconIndex + 1;
+            beaconIndex = beaconIndex + 1 >= Beacons.Length ? Beacons.Length : beaconIndex + 1;
             ValidateFrequency();
             RequestSerialization();
         }
@@ -101,19 +110,89 @@ namespace YuxiFlightInstruments.Navigation
         }
         private void ValidateFrequency()
         {
-            if (Beacons[beaconIndex] != null)
+            if (Beacons.Length != 0)
             {
-                hasBeaconSelected = true;
-                SelectedBeacon = Beacons[beaconIndex];
-                frequency = SelectedBeacon.beaconFrequency;
+                if (Beacons[beaconIndex] != null && Beacons[beaconIndex].beaconType != BeaconType.NULL)
+                {
+                    hasBeaconSelected = true;
+                    SelectedBeacon = Beacons[beaconIndex];
+                    frequency = SelectedBeacon.beaconFrequency;
+                }
+                else hasBeaconSelected = false;
             }
-            else hasBeaconSelected = false;
-            
+            else
+                Debug.Log("Beacons.Length is 0");
         }
 
         public override void OnDeserialization()
         {
             ValidateFrequency();
         }
+
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
+        private static IEnumerable<T> GetUdonSharpComponentsInScene<T>() where T : UdonSharpBehaviour
+        {
+            return FindObjectsOfType<UdonBehaviour>()
+                .Where(UdonSharpEditorUtility.IsUdonSharpBehaviour)
+                .Select(UdonSharpEditorUtility.GetProxyBehaviour)
+                .Select(u => u as T)
+                .Where(u => u != null);
+        }
+        public void Setup()
+        {
+            //NOT WORK WHY?
+            Beacons = GetUdonSharpComponentsInScene<YFI_GroundRadioBeacons>().ToArray();
+
+            EditorUtility.SetDirty(UdonSharpEditorUtility.GetBackingUdonBehaviour(this));
+        }
+
+#endif
     }
+
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
+    [CustomEditor(typeof(YFI_NavigationReceiver))]
+    public class YFI_NavigationReceiverEditor : Editor
+    {
+        private static IEnumerable<T> GetUdonSharpComponentsInScene<T>() where T : UdonSharpBehaviour
+        {
+            return FindObjectsOfType<UdonBehaviour>()
+                .Where(UdonSharpEditorUtility.IsUdonSharpBehaviour)
+                .Select(UdonSharpEditorUtility.GetProxyBehaviour)
+                .Select(u => u as T)
+                .Where(u => u != null);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            if (UdonSharpGUI.DrawDefaultUdonSharpBehaviourHeader(target)) return;
+            base.OnInspectorGUI();
+
+            EditorGUILayout.Space();
+
+            var receiver = target as YFI_NavigationReceiver;
+            if (GUILayout.Button("Setup"))
+            {
+                receiver.Setup();
+            }
+        }
+
+        [InitializeOnLoadMethod]
+        static public void RegisterCallback()
+        {
+            EditorSceneManager.sceneSaving += (_, __) => SetupBeaconList();
+        }
+
+        private static void SetupBeaconList()
+        {
+            var receivers = GetUdonSharpComponentsInScene<YFI_NavigationReceiver>();
+            foreach (var receiver in receivers)
+            {
+                if (receiver?.autoSetupBeforeSave != true) continue;
+                Debug.Log($"[{receiver.gameObject.name}] Auto setup");
+                receiver.Setup();
+            }
+        }
+    }
+
+#endif
 }

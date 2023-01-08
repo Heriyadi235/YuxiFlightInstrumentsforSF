@@ -60,7 +60,8 @@ namespace YuxiFlightInstruments.BasicFlightData
         //方法
         private void Start()
         {
-            OWMLMap = GameObject.Find("/MapObject").transform;
+            var MapObject = GameObject.Find("/MapObject");
+            if(MapObject) OWMLMap = MapObject.transform;
         }
         public void SFEXT_O_PilotEnter()
         {

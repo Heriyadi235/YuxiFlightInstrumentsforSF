@@ -55,12 +55,13 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2835810245304366281}
   frequency: 114.5
-  beaconIndex: 0
+  beaconIndex: 1
   Beacons:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   flightData: {fileID: 0}
+  autoSetupBeforeSave: 0
   hasBeaconSelected: 0
   SelectedBeacon: {fileID: 0}
   updateInterval: 0.3

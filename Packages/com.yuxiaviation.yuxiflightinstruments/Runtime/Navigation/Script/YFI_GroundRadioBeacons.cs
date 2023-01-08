@@ -9,6 +9,7 @@ namespace YuxiFlightInstruments.Navigation
 {
     public enum BeaconType
     {
+        NULL,
         NDB,
         VOR,
         VORDME,

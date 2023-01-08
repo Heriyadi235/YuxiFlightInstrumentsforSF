@@ -1,7 +1,8 @@
 {
     "name": "com.yuxiaviation.yuxiflightinstruments.Editor",
     "references": [
-        "com.yuxiaviation.yuxiflightinstruments"
+        "com.yuxiaviation.yuxiflightinstruments",
+        "UdonSharp.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [
