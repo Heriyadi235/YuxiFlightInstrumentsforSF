@@ -140,10 +140,14 @@ namespace YuxiFlightInstruments.Navigation
         }
         public void Setup()
         {
-            //NOT WORK WHY?
+            //FIXED:https://docs.unity3d.com/ScriptReference/EditorUtility.SetDirty.html
+            Undo.RecordObject(this, "set beacon");
             Beacons = GetUdonSharpComponentsInScene<YFI_GroundRadioBeacons>().ToArray();
+            EditorUtility.SetDirty(this);
 
-            EditorUtility.SetDirty(UdonSharpEditorUtility.GetBackingUdonBehaviour(this));
+            //var serializedReceiver = new SerializedObject(this);
+            //serializedReceiver.FindProperty("Beacons"). //how to use array here?
+            //serializedReceiver.ApplyModifiedProperties();
         }
 
 #endif

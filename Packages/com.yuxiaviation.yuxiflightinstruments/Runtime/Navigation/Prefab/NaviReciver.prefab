@@ -64,7 +64,7 @@ MonoBehaviour:
   autoSetupBeforeSave: 0
   hasBeaconSelected: 0
   SelectedBeacon: {fileID: 0}
-  updateInterval: 0.3
+  updateInterval: 0.1
 --- !u!114 &2835810245304366281
 MonoBehaviour:
   m_ObjectHideFlags: 0
