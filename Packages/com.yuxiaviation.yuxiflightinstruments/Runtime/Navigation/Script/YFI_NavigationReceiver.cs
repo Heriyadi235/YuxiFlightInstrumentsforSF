@@ -108,6 +108,11 @@ namespace YuxiFlightInstruments.Navigation
         {
             gameObject.SetActive(true);
         }
+
+        public void SFEXT_G_RespawnButton()
+        {
+            gameObject.SetActive(false);
+        }
         private void ValidateFrequency()
         {
             if (Beacons.Length != 0)
