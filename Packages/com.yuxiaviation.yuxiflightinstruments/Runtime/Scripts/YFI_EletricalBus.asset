@@ -719,7 +719,7 @@ MonoBehaviour:
       Data: 46|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: System.Int32, mscorlib
+      Data: System.SByte, mscorlib
     - Name: 
       Entry: 8
       Data: 

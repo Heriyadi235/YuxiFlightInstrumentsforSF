@@ -87,7 +87,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 774424193093780356}
   beaconName: VAU
   beaconFrequency: 114.5
-  beaconType: 3
+  beaconType: 1
   serviceRange: 74080
   isAvailable: 1
   glideSlopeStation: {fileID: 774424192815251501}

@@ -32,7 +32,7 @@ namespace YuxiFlightInstruments.ElectricalBus
         //是否具备条件
         [System.NonSerialized] [UdonSynced] public bool BatteryAviliable = true;
         [System.NonSerialized] [UdonSynced] public bool APUGeneratorAviliable = false;
-        [System.NonSerialized] [UdonSynced] public int engineGeneratorAviliable = 0;
+        [System.NonSerialized] [UdonSynced] public sbyte engineGeneratorAviliable = 0;
         [System.NonSerialized] [UdonSynced] public bool externalPowerAviliable = false;
         [System.NonSerialized] [UdonSynced] public bool EmergencyGeneratorAviliable = false;
 
