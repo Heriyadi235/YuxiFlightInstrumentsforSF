@@ -41,6 +41,12 @@ namespace YuxiFlightInstruments.ElectricalBus
         [Tooltip("Will be enable when masterSwitch and has power")]
         public GameObject[] avionicsEquipments = { };
 
+        //我愿称之为重置三件套
+        public void SFEXT_L_EntityStart() => ResetElectrical();
+        public void SFEXT_G_Explode() => ResetElectrical();
+        public void SFEXT_G_RespawnButton() => ResetElectrical();
+
+
         public void SFEXT_G_APUStarted()
         {
             APUGeneratorAviliable = true;
@@ -84,7 +90,6 @@ namespace YuxiFlightInstruments.ElectricalBus
             CheckIfHasPower();
         }
 
-
         public override void OnDeserialization()
         {
             CheckIfHasPower();
@@ -92,6 +97,7 @@ namespace YuxiFlightInstruments.ElectricalBus
 
         public void CheckIfHasPower()
         {
+            hasPower = false;
             if (masterSwitch)
             {
                 if (batteryOn && BatteryAviliable)
@@ -106,13 +112,33 @@ namespace YuxiFlightInstruments.ElectricalBus
                     hasPower = true;
                 else hasPower = false;
             }
-            else hasPower = false;
+            ObjectSetActive();
+        }
 
+        public void ResetElectrical()
+        {
+            batteryOn = false;
+            APUGeneratorOn = true;
+            engineGeneratorOn = true;
+            externalPowerOn = false;//EXT
+            EmergencyGeneratorOn = true;//RAT
+
+            BatteryAviliable = true;
+            APUGeneratorAviliable = false;
+            engineGeneratorAviliable = 0;
+            externalPowerAviliable = false;
+            EmergencyGeneratorAviliable = false;
+
+            CheckIfHasPower();
+        }
+
+        private void ObjectSetActive()
+        {
             foreach (var item in avionicsEquipments)
             {
                 item.SetActive(hasPower);
             }
-
         }
+
     }
 }
