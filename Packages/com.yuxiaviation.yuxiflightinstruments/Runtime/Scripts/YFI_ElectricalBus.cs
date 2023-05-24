@@ -21,20 +21,22 @@ namespace YuxiFlightInstruments.ElectricalBus
         [Tooltip("Debug Output Text")]
         public Text DebugOutput;
 
+        //A have no idea when to use main switch
         [System.NonSerialized] public bool masterSwitch = true;
-        //TODO:电瓶电量模拟，但是不想再加Update力
-        [System.NonSerialized] [UdonSynced] public bool batteryOn = false;
-        [System.NonSerialized] [UdonSynced] public bool APUGeneratorOn = true;
-        [System.NonSerialized] [UdonSynced] public bool engineGeneratorOn = true;
-        [System.NonSerialized] [UdonSynced] public bool externalPowerOn = false;//EXT
-        [System.NonSerialized] [UdonSynced] public bool EmergencyGeneratorOn = true;//RAT
 
-        //是否具备条件
-        [System.NonSerialized] [UdonSynced] public bool BatteryAviliable = true;
+        //switches
+        [System.NonSerialized] [UdonSynced] public bool batteryOn = false;
+        [System.NonSerialized] [UdonSynced] public bool APUGeneratorOn = true;//havent use
+        [System.NonSerialized] [UdonSynced] public bool engineGeneratorOn = true;//havent use
+        [System.NonSerialized] [UdonSynced] public bool externalPowerOn = false;//EXT //havent use
+        [System.NonSerialized] [UdonSynced] public bool EmergencyGeneratorOn = true;//RAT //havent use
+
+        //condications
+        [System.NonSerialized] [UdonSynced] public bool BatteryAviliable = true;//havent use
         [System.NonSerialized] [UdonSynced] public bool APUGeneratorAviliable = false;
         [System.NonSerialized] [UdonSynced] public sbyte engineGeneratorAviliable = 0;
-        [System.NonSerialized] [UdonSynced] public bool externalPowerAviliable = false;
-        [System.NonSerialized] [UdonSynced] public bool EmergencyGeneratorAviliable = false;
+        [System.NonSerialized] [UdonSynced] public bool externalPowerAviliable = false;//havent use
+        [System.NonSerialized] [UdonSynced] public bool EmergencyGeneratorAviliable = false;//havent use
 
         [System.NonSerialized] public bool hasPower = false;
 
@@ -46,34 +48,34 @@ namespace YuxiFlightInstruments.ElectricalBus
         public void SFEXT_G_Explode() => ResetElectrical();
         public void SFEXT_G_RespawnButton() => ResetElectrical();
 
-
-        public void SFEXT_G_APUStarted()
+        public void SFEXT_O_OnPlayerJoined() => RequestSerialization();
+        public void SFEXT_L_APUStarted()//havent use
         {
             APUGeneratorAviliable = true;
-            CheckIfHasPower();
+            UpdatePower();
         }
-        public void SFEXT_G_APUShutDown()
+        public void SFEXT_L_APUShutDown()//havent use
         { 
             APUGeneratorAviliable = false;
-            CheckIfHasPower();
+            UpdatePower();
         }
-        public void SFEXT_G_EngineStarted()
+        public void SFEXT_L_EngineStarted()
         {
-            CheckIfHasPower();
+            UpdatePower();
             engineGeneratorAviliable += 1;
         }
-        public void SFEXT_G_EngineShutDown()
+        public void SFEXT_L_EngineShutDown()
         {
-            CheckIfHasPower();
+            UpdatePower();
             engineGeneratorAviliable -= 1;
         }
 
-        public void ToggleMasterSwitchLocal()
+        public void OnToggleMasterSwitch()
         {
             SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(ToggleMasterSwitch));    
         }
 
-        public void ToggleBatteryLocal()
+        public void OnToggleBattery()
         {
             SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(ToggleBattery));
         }
@@ -81,21 +83,21 @@ namespace YuxiFlightInstruments.ElectricalBus
         public void ToggleMasterSwitch()
         {
             masterSwitch = !masterSwitch;
-            CheckIfHasPower();
+            UpdatePower();
         }
 
         public void ToggleBattery()
         {
             batteryOn = !batteryOn;
-            CheckIfHasPower();
+            UpdatePower();
         }
 
         public override void OnDeserialization()
         {
-            CheckIfHasPower();
+            UpdatePower();
         }
 
-        public void CheckIfHasPower()
+        public void UpdatePower()
         {
             hasPower = false;
             if (masterSwitch)
@@ -129,7 +131,7 @@ namespace YuxiFlightInstruments.ElectricalBus
             externalPowerAviliable = false;
             EmergencyGeneratorAviliable = false;
 
-            CheckIfHasPower();
+            UpdatePower();
         }
 
         private void ObjectSetActive()
