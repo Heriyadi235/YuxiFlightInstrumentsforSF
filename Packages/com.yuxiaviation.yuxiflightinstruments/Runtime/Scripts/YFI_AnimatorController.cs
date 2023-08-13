@@ -23,6 +23,7 @@ namespace YuxiFlightInstruments.AnimationDriver
         public float MAXALT = 10000f;
         [Header("对于数字每一位都需要单独动画的仪表")]
         public bool altbybit = false;
+        public bool linear = true;
         //[Tooltip("高度表万位最大示数")]
         //public int MAXALT10000 = 10;
         [Tooltip("一些罗盘动画起始角度并不为0")]
@@ -121,10 +122,21 @@ namespace YuxiFlightInstruments.AnimationDriver
             IndicatorAnimator.SetFloat(ALT_HASH, (altitude / MAXALT));
             if (altbybit)
             {
-                IndicatorAnimator.SetFloat(ALT10_HASH, (altitude % 100) / 100f);
-                IndicatorAnimator.SetFloat(ALT100_HASH, ((int)(altitude/100f) % 10) / 10f);
-                IndicatorAnimator.SetFloat(ALT1000_HASH, ((int)(altitude/1000f) % 10) / 10f);
-                IndicatorAnimator.SetFloat(ALT10000_HASH, ((int)(altitude/10000f) % 10) / 10f);
+                if (!linear)
+                { 
+                    IndicatorAnimator.SetFloat(ALT10_HASH, (altitude % 100) / 100f);
+                    IndicatorAnimator.SetFloat(ALT100_HASH, ((int)(altitude / 100f) % 10) / 10f);
+                    IndicatorAnimator.SetFloat(ALT1000_HASH, ((int)(altitude / 1000f) % 10) / 10f);
+                    IndicatorAnimator.SetFloat(ALT10000_HASH, ((int)(altitude / 10000f) % 10) / 10f);
+                }
+                else
+                {
+                    IndicatorAnimator.SetFloat(ALT10_HASH, (altitude % 100) / 100f);
+                    IndicatorAnimator.SetFloat(ALT100_HASH, ((altitude / 100f) % 10) / 10f);
+                    IndicatorAnimator.SetFloat(ALT1000_HASH, ((altitude / 1000f) % 10) / 10f);
+                    IndicatorAnimator.SetFloat(ALT10000_HASH, ((altitude / 10000f) % 10) / 10f);
+                }
+            
             }
         
         }
