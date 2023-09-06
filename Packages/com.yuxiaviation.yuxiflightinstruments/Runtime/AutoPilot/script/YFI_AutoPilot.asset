@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: YFI_AutoPilot
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: c8f5c6b3982687d4c84d9b29298bf388,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: da291e93ba603cb42afe37677fe08c88,
     type: 2}
   udonAssembly: 
   assemblyError: 

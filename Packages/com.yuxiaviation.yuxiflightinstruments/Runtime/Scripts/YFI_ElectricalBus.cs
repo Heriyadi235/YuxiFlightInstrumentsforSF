@@ -42,7 +42,7 @@ namespace YuxiFlightInstruments.ElectricalBus
 
         [Tooltip("Will be enable when masterSwitch and has power")]
         public GameObject[] avionicsEquipments = { };
-
+        public GameObject[] disableOnEletriced = { };
         //我愿称之为重置三件套
         public void SFEXT_L_EntityStart() => ResetElectrical();
         public void SFEXT_G_Explode() => ResetElectrical();
@@ -78,6 +78,24 @@ namespace YuxiFlightInstruments.ElectricalBus
         public void OnToggleBattery()
         {
             SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(ToggleBattery));
+        }
+
+        public void SFEXT_O_PilotEnter() => ObjectSetActive();
+
+        public void SFEXT_P_PassengerEnter() => ObjectSetActive();
+        public void SFEXT_O_PilotExit()
+        {
+            foreach (var item in disableOnEletriced)
+            {
+                item.SetActive(true);
+            }
+        }
+        public void SFEXT_P_PassengerExit()
+        {
+            foreach (var item in disableOnEletriced)
+            {
+                item.SetActive(true);
+            }
         }
 
         public void ToggleMasterSwitch()
@@ -139,6 +157,11 @@ namespace YuxiFlightInstruments.ElectricalBus
             foreach (var item in avionicsEquipments)
             {
                 item.SetActive(hasPower);
+            }
+
+            foreach (var item in disableOnEletriced)
+            {
+                item.SetActive(!hasPower);
             }
         }
 

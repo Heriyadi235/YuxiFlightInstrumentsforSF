@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: YFI_GroundRadioBeacons
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: 4ef88b072c027dc4da1d8968a28b6757,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: ba32c1683299d9746b2a3c92c11c8e76,
     type: 2}
   udonAssembly: 
   assemblyError: 
