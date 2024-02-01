@@ -114,17 +114,20 @@ namespace YuxiFlightInstruments.BasicFlightData
             //坡度
             bank = -SAVControl.CenterOfMass.eulerAngles.z;
             bank = bank < -180 ? (360 + bank) : bank;
-            //高度
+            //高度 英尺
             //altitude = (SAVControl.CenterOfMass.position.y - SAVControl.SeaLevel) * 3.28084f;
             altitude = (SAVControl.CenterOfMass.position.y - SAVControl.SeaLevel - (OWMLMap != null ? OWMLMap.position.y : 0)) * 3.28084f;
-            //垂直速度
+            //垂直速度 英尺/分钟
             verticalSpeed = currentVelocity.y * 60 * 3.28084f;
 
-            //马赫数 TODO:当地声速=sqrt(kRT)
-            mach = SAVControl.AirSpeed / 343f;
+            //马赫数 11000米之后的数值不准确
+            if (altitude / 3.28084f < 11000)
+                mach = SAVControl.AirSpeed/ (20.05f * Mathf.Sqrt(288f - (altitude / 3.28084f) * 0.65f / 100f));
+            else
+                mach = SAVControl.AirSpeed / 295f;
 
-            //航迹参数计算
-            Vector3 vecForward = VehicleTransform.forward;
+           //航迹参数计算
+           Vector3 vecForward = VehicleTransform.forward;
             trackPitchAngle = -Vector3.SignedAngle(vecForward, Vector3.ProjectOnPlane(currentVelocity, VehicleTransform.right), VehicleTransform.right);
             SlipAngle = Vector3.SignedAngle(vecForward, Vector3.ProjectOnPlane(currentVelocity, VehicleTransform.up), VehicleTransform.up);
         }

@@ -16,7 +16,7 @@ Shader "Unlit/PAPI"
         [HDR]_IncorrectColor("Up Color", Color) = (1,1,1,1)
 
         //_AngelOffset("AngelOffset", Float) = 0
-        _MinAngle("Minimum Angle", Float) = 2.5
+        _AngleThreshold("Minimum Angle", Float) = 2.5
         _WorldUp("World Up",Vector) = (0,1,0)
     }
 
@@ -31,6 +31,7 @@ Shader "Unlit/PAPI"
 
         struct Input
         {
+            float3 worldNormal;
             float2 uv_MainTex;
             float3 viewDir;
         };
@@ -42,18 +43,25 @@ Shader "Unlit/PAPI"
         
         half4 _IncorrectColor;
         
-        float _MinAngle;
+        float _AngleThreshold;
         float3 _WorldUp;
 
 
         void surf(Input IN, inout SurfaceOutputStandard o)
         {
-            //_WorldUp = float3(0, 1, 0);s
+            const float RadToDeg = 180.0 / UNITY_PI;
+
             // Calculate the angle between the viewing direction and the normal of the PAPI light's surface
-            float angle = acos(dot(IN.viewDir, _WorldUp));
-            //float minAngle = _MinAngle;
+            //float3 localLeft = mul(unity_ObjectToWorld, float4(0, 0, 1, 0)).xyz;
+            //float angle = RadToDeg * acos(dot(IN.viewDir, normalize(cross(IN.worldNormal, localLeft))));
+            //上面这种算法在场景视图里好使，但是playmode就不行，怪
+
+            float3 LocalNormal = mul(unity_WorldToObject, float4(IN.worldNormal, 0));
+            float3 WorldNormal = mul(unity_ObjectToWorld, float4(LocalNormal, 0)).xyz;
+            float3 LocalLeft = normalize(cross(WorldNormal, _WorldUp));
+            float angle = RadToDeg * acos(dot(cross(WorldNormal, LocalLeft), IN.viewDir));
             // If the angle is within the correct range, set the color to the correct color
-            if (angle >= _MinAngle)
+            if (angle >= _AngleThreshold)
             {
                 o.Albedo = _CorrectColor;
                 o.Emission = _CorrectColor.rgb;
