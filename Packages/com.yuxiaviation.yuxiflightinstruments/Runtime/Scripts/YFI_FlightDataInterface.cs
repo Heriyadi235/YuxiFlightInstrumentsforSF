@@ -43,8 +43,11 @@ namespace YuxiFlightInstruments.BasicFlightData
         [System.NonSerialized] public float verticalSpeed = 0; //爬升率 in ft/min
         [System.NonSerialized] public float verticalG = 0; //垂直G
         [System.NonSerialized] public float angleOfAttack = 0; //水平攻角与垂直攻角中间的大值
+        [System.NonSerialized] public float AOAPitch = 0; //俯仰攻角
+        [System.NonSerialized] public float AOAYaw = 0; //偏航攻角
         [System.NonSerialized] public float mach = 0; //水平攻角与垂直攻角中间的大值
-
+        public float velocityStall = 30; //达到失速状态飞机的前向速度,根据载荷因数变化
+        public float velocityStall1G = 30; //达到失速状态飞机的前向速度,(Vs1g)
         //航迹信息
         [System.NonSerialized] public float trackPitchAngle = 0; //航迹俯仰角 向上为正
         [System.NonSerialized] public float SlipAngle = 0; //侧滑角 向右为正
@@ -100,6 +103,8 @@ namespace YuxiFlightInstruments.BasicFlightData
             verticalG = SAVControl.VertGs;
             //攻角
             angleOfAttack = SAVControl.AngleOfAttack;
+            AOAPitch = SAVControl.AngleOfAttackPitch;
+            AOAYaw = SAVControl.AngleOfAttackYaw;
             //获取航迹矢量
             currentVelocity = SAVControl.CurrentVel.magnitude > 0.5f ? SAVControl.CurrentVel : Vector3.zero;
 
@@ -126,8 +131,16 @@ namespace YuxiFlightInstruments.BasicFlightData
             else
                 mach = SAVControl.AirSpeed / 295f;
 
-           //航迹参数计算
-           Vector3 vecForward = VehicleTransform.forward;
+            //失速速度计算1: 飞机局部坐标系中的前向速度与垂直速度比值大于tan(最大攻角)(结果准确，但是受到当前垂直速度影响波动大)
+            //velocityStall = 1.94384f *Vector3.Magnitude(Vector3.Project(SAVControl.AirVel, SAVControl.VehicleTransform.up)) / Mathf.Tan(Mathf.Deg2Rad * SAVControl.MaxAngleOfAttackPitch);
+            //失速速度计算2: 保持最大攻角所需速度,未考虑vellift，系数设置为13.54后与sav自带的气动模型失速速度较吻合
+            var velocityStallTarget = 1.94384f * Mathf.Sqrt((2 * (((verticalG>0?verticalG:1) - 1)*0.5f+1) * SAVControl.VehicleRigidbody.mass * 9.81f) / (SAVControl.Atmosphere * 13.54f * SAVControl.Lift * SAVControl.ExtraLift));
+            
+            velocityStall1G = 1.94384f * Mathf.Sqrt((2 * SAVControl.VehicleRigidbody.mass * 9.81f) / (SAVControl.Atmosphere * 13.54f * SAVControl.Lift * SAVControl.ExtraLift));
+
+            velocityStall = Mathf.MoveTowards(velocityStall, velocityStallTarget, 0.13f);//保证数值稳定性,每帧变化0.13节
+            //航迹参数计算
+            Vector3 vecForward = VehicleTransform.forward;
             trackPitchAngle = -Vector3.SignedAngle(vecForward, Vector3.ProjectOnPlane(currentVelocity, VehicleTransform.right), VehicleTransform.right);
             SlipAngle = Vector3.SignedAngle(vecForward, Vector3.ProjectOnPlane(currentVelocity, VehicleTransform.up), VehicleTransform.up);
         }
