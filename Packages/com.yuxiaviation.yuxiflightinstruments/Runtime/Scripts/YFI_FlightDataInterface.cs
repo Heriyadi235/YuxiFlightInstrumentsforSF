@@ -8,8 +8,10 @@ using SaccFlightAndVehicles;
 namespace YuxiFlightInstruments.BasicFlightData
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(100)]//after all SaccAirVehicle default script
     public class YFI_FlightDataInterface : UdonSharpBehaviour
     {
+        
         /*2022-05-28
          * 我寻思先写一个接口从AVController或者eneity里面把仪表
          * 需要显示的参数先给整出来
@@ -55,8 +57,7 @@ namespace YuxiFlightInstruments.BasicFlightData
 
         [Tooltip("磁偏角")]
         public float magneticDeclination = 0;//西偏于真北为负 
-
-        private Vector3 currentVelocity = Vector3.zero; //航迹矢量
+        public Vector3 currentVelocity = Vector3.zero; //航迹矢量
 
         private bool PlayerInVehicle = false;
 
@@ -65,22 +66,27 @@ namespace YuxiFlightInstruments.BasicFlightData
         {
             var MapObject = GameObject.Find("/MapObject");
             if(MapObject) OWMLMap = MapObject.transform;
+            
         }
         public void SFEXT_O_PilotEnter()
         {
             PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+            gameObject.SetActive(PlayerInVehicle);
         }
         public void SFEXT_O_PilotExit()
         {
             PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+            gameObject.SetActive(PlayerInVehicle);
         }
         public void SFEXT_P_PassengerEnter()
         {
             PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+            gameObject.SetActive(PlayerInVehicle);
         }
         public void SFEXT_P_PassengerExit()
         {
             PlayerInVehicle = SAVControl.Piloting || SAVControl.Passenger;
+            gameObject.SetActive(PlayerInVehicle);
         }
         public void SFEXT_L_EntityStart()
         {
@@ -88,6 +94,7 @@ namespace YuxiFlightInstruments.BasicFlightData
             SAVControl = (SaccAirVehicle)entityControl.GetExtention(GetUdonTypeName<SaccAirVehicle>());
             VehicleTransform = entityControl.transform;
             PlayerInVehicle = false;
+            gameObject.SetActive(false);
             FlightDataUpdate();
         }
 
@@ -97,7 +104,7 @@ namespace YuxiFlightInstruments.BasicFlightData
             //TODO:地速与TAS包含了垂直速度？
             //地速
             groundSpeed = SAVControl.Speed * 1.94384f;
-            //TAS
+            //TAS (actural IAS）
             TAS = SAVControl.AirSpeed * 1.94384f;
             //垂直G力
             verticalG = SAVControl.VertGs;
@@ -138,7 +145,7 @@ namespace YuxiFlightInstruments.BasicFlightData
             
             velocityStall1G = 1.94384f * Mathf.Sqrt((2 * SAVControl.VehicleRigidbody.mass * 9.81f) / (SAVControl.Atmosphere * 13.54f * SAVControl.Lift * SAVControl.ExtraLift));
 
-            velocityStall = Mathf.MoveTowards(velocityStall, velocityStallTarget, 0.13f);//保证数值稳定性,每帧变化0.13节
+            velocityStall = Mathf.MoveTowards(velocityStall, velocityStallTarget, 0.13f*Time.deltaTime);//保证数值稳定性,每帧变化0.13节
             //航迹参数计算
             Vector3 vecForward = VehicleTransform.forward;
             trackPitchAngle = -Vector3.SignedAngle(vecForward, Vector3.ProjectOnPlane(currentVelocity, VehicleTransform.right), VehicleTransform.right);
@@ -152,8 +159,11 @@ namespace YuxiFlightInstruments.BasicFlightData
 
         private void Update()
         {
-            if (PlayerInVehicle)
+            if (!PlayerInVehicle)
             {
+                gameObject.SetActive(false);
+            }
+            else
                 FlightDataUpdate();
                 /*
                 if (DebugOutput)
@@ -169,8 +179,7 @@ namespace YuxiFlightInstruments.BasicFlightData
                     "\nGS: ", groundSpeed.ToString(),
                     "\nTAS: ", TAS.ToString());
                 }
-                */
-            }
+                */   
         }
     }
 }

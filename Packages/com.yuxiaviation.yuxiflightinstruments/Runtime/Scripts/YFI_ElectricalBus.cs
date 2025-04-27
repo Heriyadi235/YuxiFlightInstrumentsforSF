@@ -8,6 +8,7 @@ using SaccFlightAndVehicles;
 namespace YuxiFlightInstruments.ElectricalBus
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [DefaultExecutionOrder(150)]
     public class YFI_ElectricalBus : UdonSharpBehaviour
     {
         /*2023-01-23
@@ -25,25 +26,37 @@ namespace YuxiFlightInstruments.ElectricalBus
         [System.NonSerialized] public bool masterSwitch = true;
 
         //switches
-        [System.NonSerialized] [UdonSynced] public bool batteryOn = false;
-        [System.NonSerialized] [UdonSynced] public bool APUGeneratorOn = true;//havent use
-        [System.NonSerialized] [UdonSynced] public bool engineGeneratorOn = true;//havent use
-        [System.NonSerialized] [UdonSynced] public bool externalPowerOn = false;//EXT //havent use
-        [System.NonSerialized] [UdonSynced] public bool EmergencyGeneratorOn = true;//RAT //havent use
+        [System.NonSerialized][UdonSynced] public bool batteryOn = false;
+        [System.NonSerialized] public bool APUGeneratorOn = true;//havent use
+        [System.NonSerialized] public bool engineGeneratorOn = true;//havent use
+        [System.NonSerialized] public bool externalPowerOn = false;//EXT //havent use
+        [System.NonSerialized] public bool EmergencyGeneratorOn = true;//RAT //havent use
 
         //condications
-        [System.NonSerialized] [UdonSynced] public bool BatteryAviliable = true;//havent use
-        [System.NonSerialized] [UdonSynced] public bool APUGeneratorAviliable = false;
-        [System.NonSerialized] [UdonSynced] public sbyte engineGeneratorAviliable = 0;
-        [System.NonSerialized] [UdonSynced] public bool externalPowerAviliable = false;//havent use
-        [System.NonSerialized] [UdonSynced] public bool EmergencyGeneratorAviliable = false;//havent use
+        [System.NonSerialized] public bool BatteryAviliable = true;//havent use
+        [System.NonSerialized] public bool APUGeneratorAviliable = false;
+        [System.NonSerialized] public sbyte engineGeneratorAviliable = 0;
+        [System.NonSerialized] public bool externalPowerAviliable = false;//havent use
+        [System.NonSerialized] public bool EmergencyGeneratorAviliable = false;//havent use
 
-        [System.NonSerialized] public bool hasPower = false;
+        [System.NonSerialized] [UdonSynced] public bool hasPower = false;
 
         [Tooltip("Will be enable when masterSwitch and has power")]
         public GameObject[] avionicsEquipments = { };
         public GameObject[] disableOnEletriced = { };
         //我愿称之为重置三件套
+        public void Start()
+        {
+            foreach (var item in avionicsEquipments)
+            {
+                item.SetActive(hasPower);
+            }
+
+            foreach (var item in disableOnEletriced)
+            {
+                item.SetActive(!hasPower);
+            }
+        }
         public void SFEXT_L_EntityStart() => ResetElectrical();
         public void SFEXT_G_Explode() => ResetElectrical();
         public void SFEXT_G_RespawnButton() => ResetElectrical();
@@ -52,37 +65,36 @@ namespace YuxiFlightInstruments.ElectricalBus
         public void SFEXT_L_APUStarted()//havent use
         {
             APUGeneratorAviliable = true;
-            UpdatePower();
+            CheckPower();
         }
         public void SFEXT_L_APUShutDown()//havent use
         { 
             APUGeneratorAviliable = false;
-            UpdatePower();
+            CheckPower();
         }
         public void SFEXT_L_EngineStarted()
         {
-            UpdatePower();
+            CheckPower();
             engineGeneratorAviliable += 1;
         }
         public void SFEXT_L_EngineShutDown()
         {
-            UpdatePower();
+            CheckPower();
             engineGeneratorAviliable -= 1;
         }
 
         public void OnToggleMasterSwitch()
         {
-            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(ToggleMasterSwitch));    
+            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(ToggleMasterSwitch));    
         }
 
         public void OnToggleBattery()
         {
-            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.All, nameof(ToggleBattery));
+            SendCustomNetworkEvent(VRC.Udon.Common.Interfaces.NetworkEventTarget.Owner, nameof(ToggleBattery));
         }
 
-        public void SFEXT_O_PilotEnter() => ObjectSetActive();
-
-        public void SFEXT_P_PassengerEnter() => ObjectSetActive();
+        public void SFEXT_O_PilotEnter() => ApplyPower();
+        public void SFEXT_P_PassengerEnter() => ApplyPower();
         public void SFEXT_O_PilotExit()
         {
             foreach (var item in disableOnEletriced)
@@ -101,38 +113,43 @@ namespace YuxiFlightInstruments.ElectricalBus
         public void ToggleMasterSwitch()
         {
             masterSwitch = !masterSwitch;
-            UpdatePower();
+            CheckPower();
         }
 
         public void ToggleBattery()
         {
             batteryOn = !batteryOn;
-            UpdatePower();
+            CheckPower();
         }
 
         public override void OnDeserialization()
         {
-            UpdatePower();
+            ApplyPower();
         }
 
-        public void UpdatePower()
+        public void CheckPower()
         {
-            hasPower = false;
-            if (masterSwitch)
+            if (entityControl.IsOwner)
             {
-                if (batteryOn && BatteryAviliable)
-                    hasPower = true;
-                else if (APUGeneratorOn && APUGeneratorAviliable)
-                    hasPower = true;
-                else if (engineGeneratorOn && engineGeneratorAviliable>0)
-                    hasPower = true;
-                else if (externalPowerOn && externalPowerAviliable)
-                    hasPower = true;
-                else if (EmergencyGeneratorOn && EmergencyGeneratorAviliable)
-                    hasPower = true;
-                else hasPower = false;
+                hasPower = false;
+                if (masterSwitch)
+                {
+                    if (batteryOn && BatteryAviliable)
+                        hasPower = true;
+                    else if (APUGeneratorOn && APUGeneratorAviliable)
+                        hasPower = true;
+                    else if (engineGeneratorOn && engineGeneratorAviliable > 0)
+                        hasPower = true;
+                    else if (externalPowerOn && externalPowerAviliable)
+                        hasPower = true;
+                    else if (EmergencyGeneratorOn && EmergencyGeneratorAviliable)
+                        hasPower = true;
+                    else hasPower = false;
+                }
+                ApplyPower();
+                RequestSerialization();
             }
-            ObjectSetActive();
+            
         }
 
         public void ResetElectrical()
@@ -149,19 +166,23 @@ namespace YuxiFlightInstruments.ElectricalBus
             externalPowerAviliable = false;
             EmergencyGeneratorAviliable = false;
 
-            UpdatePower();
+            hasPower = false;
+            ApplyPower();
         }
 
-        private void ObjectSetActive()
+        private void ApplyPower()
         {
-            foreach (var item in avionicsEquipments)
+            if (entityControl.Piloting || entityControl.Passenger)
             {
-                item.SetActive(hasPower);
-            }
+                foreach (var item in avionicsEquipments)
+                {
+                    item.SetActive(hasPower);
+                }
 
-            foreach (var item in disableOnEletriced)
-            {
-                item.SetActive(!hasPower);
+                foreach (var item in disableOnEletriced)
+                {
+                    item.SetActive(!hasPower);
+                }
             }
         }
 
